@@ -1,0 +1,9 @@
+{
+  "name": "@trequend/todo-backend",
+  "author": "Dmitry Balakin",
+  "private": true,
+  "scripts": {
+    "start": "deno run index.ts",
+    "pre-commit": "echo hello && deno lint && deno fmt --check"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "@trequend/todo",
+  "private": true,
+  "repository": "https://github.com/Trequend/todo.git",
+  "author": "Dmitry Balakin",
+  "license": "MIT",
+  "scripts": {
+    "bootstrap": "lerna bootstrap --ignore-prepublish",
+    "prepare": "husky install && yarn bootstrap",
+    "pre-commit": "lerna run pre-commit --parallel --since HEAD"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-customizable"
+    },
+    "cz-customizable": {
+      "config": "./config/cz.js"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
+    "cz-customizable": "^6.3.0",
+    "husky": "^7.0.0",
+    "lerna": "^4.0.0"
+  }
+}
