@@ -7,7 +7,8 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --ignore-prepublish",
     "prepare": "husky install && yarn bootstrap",
-    "pre-commit": "lerna run pre-commit --parallel --since HEAD"
+    "pre-commit": "prettier --check . todo.code-workspace && lerna run pre-commit --parallel --since HEAD",
+    "fmt": "prettier --write --loglevel warn . todo.code-workspace"
   },
   "config": {
     "commitizen": {
@@ -27,6 +28,7 @@
     "@commitlint/config-conventional": "^13.1.0",
     "cz-customizable": "^6.3.0",
     "husky": "^7.0.0",
-    "lerna": "^4.0.0"
+    "lerna": "^4.0.0",
+    "prettier": "2.3.2"
   }
 }

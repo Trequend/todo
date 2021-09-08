@@ -4,6 +4,6 @@
   "private": true,
   "scripts": {
     "start": "deno run index.ts",
-    "pre-commit": "echo hello && deno lint && deno fmt --check"
+    "pre-commit": "deno lint"
   }
 }
