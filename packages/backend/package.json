@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "deno run index.ts",
-    "pre-commit": "deno lint"
+    "lint": "deno lint",
+    "pre-commit": "yarn run lint"
   }
 }
