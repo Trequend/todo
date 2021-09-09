@@ -1,0 +1,54 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.header {
+  flex: 0 0 auto;
+  text-align: center;
+  padding: 15px 0;
+}
+
+.logoIcon {
+  color: #1890ff;
+}
+
+.content {
+  flex: 1 0 auto;
+  padding: 10px 0;
+  overflow-x: hidden;
+}
+
+.footer {
+  flex: 0 0 auto;
+  text-align: center;
+  padding: 15px 0;
+}
+
+.fade {
+  &Enter {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+
+  &EnterActive {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+
+  &Exit {
+    opacity: 1;
+  }
+
+  &ExitActive {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  &EnterActive,
+  &ExitActive {
+    transition: opacity 500ms, transform 500ms;
+  }
+}
