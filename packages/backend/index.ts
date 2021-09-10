@@ -12,6 +12,7 @@ const app = new oak.Application<State>({
   state: {
     users,
   },
+  contextState: "prototype",
 });
 
 const userApi = createUserApi<State>();
