@@ -1,5 +1,5 @@
 import { bcrypt, mongo, oak, validasaur } from "../deps.ts";
-import { User } from "../types/mod.ts";
+import type { User } from "../types/mod.ts";
 import { response } from "../utils/mod.ts";
 
 interface WithUsers {
@@ -34,25 +34,33 @@ export default function createUserApi<T extends WithUsers>() {
     .get("/api/user/:id", async (context) => {
       const id = context.params.id;
       if (!id) {
-        return response.error(context, 400, "No id");
+        return response.error(context, 400, {
+          message: "No id",
+        });
       }
 
       const user = await context.state.users.findOne({
         _id: new mongo.Bson.ObjectID(id),
       });
       if (!user) {
-        return response.error(context, 404, "User not found");
+        return response.error(context, 404, {
+          message: "User not found",
+        });
       }
 
       context.response.body = sanitizeUser(user);
     })
     .put("/api/user", async (context) => {
       if (!context.request.hasBody) {
-        return response.error(context, 400, "No body");
+        return response.error(context, 400, {
+          message: "No body",
+        });
       }
 
       if (context.request.body().type !== "json") {
-        return response.error(context, 400, "Wrong body type");
+        return response.error(context, 400, {
+          message: "Wrong body type",
+        });
       }
 
       const user = await context.request.body().value;
@@ -73,20 +81,16 @@ export default function createUserApi<T extends WithUsers>() {
       });
 
       if (!passes) {
-        return response.error(
-          context,
-          400,
-          "Failed to register user",
-          firstMessages(errors),
-        );
+        return response.error(context, 400, {
+          message: "Failed to register user",
+          body: firstMessages(errors),
+        });
       }
 
       if (await context.state.users.findOne({ email: user.email })) {
-        return response.error(
-          context,
-          400,
-          `User with email "${user.email}" already exists`,
-        );
+        return response.error(context, 400, {
+          message: `User with email "${user.email}" already exists`,
+        });
       }
 
       try {

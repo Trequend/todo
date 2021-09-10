@@ -1,4 +1,4 @@
-import Todo from "./Todo.ts";
+import type Todo from "./todo.ts";
 
 type User = {
   _id: { $oid: string };

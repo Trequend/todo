@@ -1,5 +1,5 @@
 import { mongo } from "./deps.ts";
-import { User } from "./types/mod.ts";
+import type { User } from "./types/mod.ts";
 
 const mongoClient = new mongo.MongoClient();
 const database = await mongoClient.connect("mongodb://127.0.0.1:27017/todo");
