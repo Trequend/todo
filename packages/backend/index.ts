@@ -1,5 +1,5 @@
 import { mongo, oak } from "./deps.ts";
-import { useLogger, useStaticFiles } from "./middlewares/mod.ts";
+import { logger, staticFiles } from "./middlewares/mod.ts";
 import { users } from "./database.ts";
 import { User } from "./types/mod.ts";
 import { createUserApi } from "./api/mod.ts";
@@ -18,11 +18,9 @@ const userApi = createUserApi<State>();
 
 // Middlewares
 
-useLogger(app);
-
+app.use(logger);
 app.use(userApi.routes(), userApi.allowedMethods());
-
-useStaticFiles(app, `${Deno.cwd()}/build`);
+app.use(staticFiles(`${Deno.cwd()}/build`));
 
 // Start
 

@@ -1,2 +1,2 @@
-export { default as useLogger } from "./useLogger.ts";
-export { default as useStaticFiles } from "./useStaticFiles.ts";
+export { default as logger } from "./logger.ts";
+export { default as staticFiles } from "./staticFiles.ts";

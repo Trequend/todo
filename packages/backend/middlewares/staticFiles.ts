@@ -1,10 +1,7 @@
 import { oak } from "../deps.ts";
 
-export default function useStaticFiles<AS>(
-  app: oak.Application<AS>,
-  root: string,
-) {
-  app.use(async (context) => {
+export default function staticFiles(root: string): oak.Middleware {
+  return async (context) => {
     try {
       await oak.send(context, context.request.url.pathname, {
         root,
@@ -20,5 +17,5 @@ export default function useStaticFiles<AS>(
         throw error;
       }
     }
-  });
+  };
 }
