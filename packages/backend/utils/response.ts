@@ -12,8 +12,8 @@ interface ErrorOptions {
 }
 
 const response = {
-  success<P extends oak.RouteParams, S>(
-    context: oak.RouterContext<P, S>,
+  success(
+    context: oak.Context,
     { body }: SuccessOptions = {},
   ): void {
     context.response.status = 200;
@@ -23,10 +23,10 @@ const response = {
     };
   },
 
-  error<P extends oak.RouteParams, S>(
-    context: oak.RouterContext<P, S>,
+  error(
+    context: oak.Context,
     status: oak.Status,
-    { message, body }: ErrorOptions,
+    { message, body }: ErrorOptions = {},
   ): void {
     context.response.status = status;
     context.response.body = {
@@ -36,12 +36,8 @@ const response = {
     };
   },
 
-  internalError<P extends oak.RouteParams, S>(
-    context: oak.RouterContext<P, S>,
-  ): void {
-    this.error(context, 500, {
-      message: "Internal Server Error",
-    });
+  internalError(context: oak.Context): void {
+    this.error(context, 500);
   },
 };
 

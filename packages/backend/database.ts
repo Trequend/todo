@@ -1,5 +1,5 @@
 import { mongo } from "./deps.ts";
-import type { User } from "./types/mod.ts";
+import type { Session, User } from "./types/mod.ts";
 
 const mongoClient = new mongo.MongoClient();
 const database = await mongoClient.connect("mongodb://127.0.0.1:27017/todo");
@@ -11,6 +11,14 @@ await users.createIndexes({
   ],
 });
 
-export { users };
+const sessions = database.collection<Session>("sessions");
+await sessions.createIndexes({
+  indexes: [
+    { key: { sessionId: 1 }, name: "sessionId", unique: true },
+    { key: { expires: 1 }, name: "expires", expireAfterSeconds: 0 },
+  ],
+});
+
+export { sessions, users };
 
 export default database;

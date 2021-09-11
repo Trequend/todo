@@ -1,15 +1,23 @@
-import { oak } from "../deps.ts";
+import { colors, oak } from "../deps.ts";
 
-const logger: oak.Middleware = async (context, next) => {
-  console.log(
-    `${context.request.method.toUpperCase()} ${context.request.url.href}`,
-  );
-  try {
-    await next();
-  } catch (error) {
-    console.error(error);
-    context.throw(500);
-  }
-};
-
-export default logger;
+export default function logger(): oak.Middleware {
+  return async (context, next) => {
+    console.log(
+      `${
+        colors.green(context.request.method.toUpperCase())
+      } ${context.request.url.href}`,
+    );
+    try {
+      await next();
+    } finally {
+      const color = oak.isErrorStatus(context.response.status)
+        ? colors.red
+        : colors.green;
+      console.log(
+        `${context.request.url.href} ${
+          color(context.response.status.toString())
+        }`,
+      );
+    }
+  };
+}

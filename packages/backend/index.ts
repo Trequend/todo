@@ -1,27 +1,34 @@
-import { mongo, oak } from "./deps.ts";
-import { logger, staticFiles } from "./middlewares/mod.ts";
-import { users } from "./database.ts";
-import { User } from "./types/mod.ts";
-import { createUserApi } from "./api/mod.ts";
+import { oak } from "./deps.ts";
+import {
+  auth,
+  csrfGuard,
+  errorHandler,
+  logger,
+  session,
+} from "./middlewares/mod.ts";
+import { sessions, users } from "./database.ts";
+import type { ApplicationState } from "./types/mod.ts";
+import { authApi, usersApi } from "./api/mod.ts";
 
-type State = {
-  users: mongo.Collection<User>;
-};
-
-const app = new oak.Application<State>({
+const app = new oak.Application<ApplicationState>({
   state: {
     users,
+    sessions,
   },
   contextState: "prototype",
+  logErrors: false,
+  keys: ["SUPER_TEST"],
 });
-
-const userApi = createUserApi<State>();
 
 // Middlewares
 
-app.use(logger);
-app.use(userApi.routes(), userApi.allowedMethods());
-app.use(staticFiles(`${Deno.cwd()}/build`));
+app.use(logger());
+app.use(errorHandler());
+app.use(session({ cookieName: "SESSIONID", initialMaxAge: 360000 }));
+app.use(csrfGuard());
+app.use(authApi.routes(), authApi.allowedMethods());
+app.use(auth());
+app.use(usersApi.routes(), usersApi.allowedMethods());
 
 // Start
 
