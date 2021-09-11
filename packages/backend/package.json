@@ -6,6 +6,7 @@
     "prepare": "yarn run deps",
     "deps": "deno cache --unstable deps.ts",
     "start": "deno run --allow-net --allow-read --unstable index.ts",
+    "dev": "denon run --allow-net --allow-read --unstable index.ts",
     "lint": "deno lint --ignore=./build && deno fmt --ignore=./build",
     "pre-commit": "yarn run lint"
   }
