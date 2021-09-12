@@ -10,9 +10,9 @@ import styles from './Login.module.scss';
 
 const Login: FC = () => {
   const location = useLocation();
-  const user = useSelector((state: AppState) => state.user.data);
+  const userId = useSelector((state: AppState) => state.user.id);
 
-  if (user) {
+  if (userId) {
     return <Redirect to="/" />;
   }
 

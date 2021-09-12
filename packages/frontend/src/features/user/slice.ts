@@ -1,34 +1,36 @@
 import { createSlice } from '@reduxjs/toolkit';
-import ApiError from '../../errors/ApiError';
 import User from '../../types/User';
-import createApiThunk from '../../utils/createApiThunk';
+import addTaskHandler, { WithTask } from '../../utils/addTaskHandler';
+import createApiTask from '../../utils/createApiTask';
 import * as api from './api';
 
 type State = {
+  id?: string;
   data?: User;
-  signInPending: boolean;
-  signUpPending: boolean;
-  logoutPending: boolean;
-  signInError?: string;
-  signUpError?: string;
-  logoutError?: string;
-};
+} & WithTask<'fetch'> &
+  WithTask<'signIn'> &
+  WithTask<'signUp'> &
+  WithTask<'logout'>;
 
-const initialState: State = {
+const SLICE_NAME = 'user';
+
+export const userInitialState: State = {
+  fetchPending: false,
   signInPending: false,
   signUpPending: false,
   logoutPending: false,
 };
 
-const sliceName = 'user';
+const tasks = {
+  fetchUser: createApiTask(SLICE_NAME, 'fetchUser', api.fetchUser),
+  signIn: createApiTask(SLICE_NAME, 'signIn', api.signIn),
+  signUp: createApiTask(SLICE_NAME, 'signUp', api.signUp),
+  logout: createApiTask(SLICE_NAME, 'logout', api.logout),
+};
 
-export const signIn = createApiThunk(sliceName, 'signIn', api.signIn);
-export const signUp = createApiThunk(sliceName, 'signUp', api.signUp);
-export const logout = createApiThunk(sliceName, 'logout', api.logout);
-
-const userSlice = createSlice({
-  name: sliceName,
-  initialState,
+const slice = createSlice({
+  name: SLICE_NAME,
+  initialState: userInitialState,
   reducers: {
     removeSignInError: (state) => {
       state.signInError = undefined;
@@ -41,50 +43,26 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(signIn.pending, (state) => {
-        state.signInPending = true;
-      })
-      .addCase(signIn.fulfilled, (state, { payload: user }) => {
-        state.signInPending = false;
+    addTaskHandler('fetch', builder, tasks.fetchUser, {
+      onFulfill(state, { payload: user }) {
         state.data = user;
-      })
-      .addCase(signIn.rejected, (state, { error }) => {
-        state.signInPending = false;
-        console.log(error);
-        state.signInError = (error as ApiError).message;
-      });
+      },
+    });
 
-    builder
-      .addCase(signUp.pending, (state) => {
-        state.signUpPending = true;
-      })
-      .addCase(signUp.fulfilled, (state) => {
-        state.signUpPending = false;
-      })
-      .addCase(signUp.rejected, (state, { error }) => {
-        state.signUpPending = false;
-        console.log(error);
-        state.signUpError = (error as ApiError).message;
-      });
+    addTaskHandler('signIn', builder, tasks.signIn, {
+      onFulfill(state, { payload: id }) {
+        state.id = id;
+      },
+    });
 
-    builder
-      .addCase(logout.pending, (state) => {
-        state.signUpPending = true;
-      })
-      .addCase(logout.fulfilled, (state) => {
-        state.logoutPending = false;
-      })
-      .addCase(logout.rejected, (state, { error }) => {
-        state.logoutPending = false;
-        console.log(error);
-        state.logoutError = (error as ApiError).message;
-      });
+    addTaskHandler('signUp', builder, tasks.signUp);
+    addTaskHandler('logout', builder, tasks.logout);
   },
 });
 
-export const { removeSignInError, removeSignUpError, removeLogoutError } =
-  userSlice.actions;
+export const userActions = Object.freeze({
+  ...tasks,
+  ...slice.actions,
+});
 
-const userReducer = userSlice.reducer;
-export default userReducer;
+export const userReducer = slice.reducer;

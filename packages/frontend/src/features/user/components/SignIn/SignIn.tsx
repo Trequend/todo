@@ -3,7 +3,7 @@ import { Button, Input, Form, Checkbox, Alert } from 'antd';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../../../app/store';
-import { removeSignInError, signIn } from '../../slice';
+import { userActions } from '../../slice';
 import useAppDispatch from '../../../../hooks/useAppDispatch';
 import styles from './SignIn.module.scss';
 import { Link } from 'react-router-dom';
@@ -15,7 +15,7 @@ const SignIn: FC = () => {
 
   const onFinish = (values: any) => {
     dispatch(
-      signIn({
+      userActions.signIn({
         email: values.email,
         password: values.password,
       })
@@ -24,7 +24,7 @@ const SignIn: FC = () => {
 
   useEffect(() => {
     return () => {
-      dispatch(removeSignInError());
+      dispatch(userActions.removeSignInError());
     };
   }, [dispatch]);
 

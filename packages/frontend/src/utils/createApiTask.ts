@@ -1,11 +1,11 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import ApiError from '../errors/ApiError';
 
-export default function createApiThunk<Params, Result>(
+function createApiTask<Result, Params = void>(
   sliceName: string,
   thunkName: string,
   api: (params: Params) => Promise<Result>
-) {
+): AsyncThunk<Result, Params, {}> {
   return createAsyncThunk(
     `${sliceName}/${thunkName}`,
     async (params: Params) => {
@@ -26,3 +26,5 @@ export default function createApiThunk<Params, Result>(
     }
   );
 }
+
+export default createApiTask;

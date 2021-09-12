@@ -1,12 +1,72 @@
-import { FC } from 'react';
-import User from '../../types/User';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Button, Spin } from 'antd';
+import { FC, useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
+import { userActions } from '../../features/user/slice';
+import useAppDispatch from '../../hooks/useAppDispatch';
+import useAppSelector from '../../hooks/useAppSelector';
+import styles from './Home.module.scss';
 
-type Props = {
-  user: User;
-};
+const Home: FC = () => {
+  const userId = useAppSelector((state) => state.user.id);
+  const user = useAppSelector((state) => state.user.data);
+  const userLoading = useAppSelector((state) => state.user.fetchPending);
+  const userError = useAppSelector((state) => state.user.fetchError);
+  const logoutPending = useAppSelector((state) => state.user.logoutPending);
+  const dispatch = useAppDispatch();
 
-const Home: FC<Props> = ({ user }) => {
-  return <h1>{user.firstName}</h1>;
+  useEffect(() => {
+    if (userId) {
+      dispatch(userActions.fetchUser());
+    }
+  }, [dispatch, userId]);
+
+  if (!userId) {
+    return <Redirect to="/signin" />;
+  }
+
+  const reload = () => {
+    window.location.reload();
+  };
+
+  const logout = () => {
+    dispatch(userActions.logout());
+  };
+
+  if (!user || userLoading) {
+    return (
+      <div className={styles.userInfo}>
+        {userLoading ? (
+          <Spin
+            indicator={<LoadingOutlined className={styles.userLoadingIcon} />}
+            delay={500}
+          />
+        ) : (
+          <>
+            <h2>{userError ? `${userError}` : 'Unknown error occured'}</h2>
+            <Button type="primary" htmlType="button" onClick={reload}>
+              Reload
+            </Button>
+          </>
+        )}
+      </div>
+    );
+  } else {
+    console.log(user);
+    return (
+      <div className={styles.userInfo}>
+        <h1>{user.firstName}</h1>
+        <Button
+          type="primary"
+          onClick={logout}
+          htmlType="button"
+          loading={logoutPending}
+        >
+          Logout
+        </Button>
+      </div>
+    );
+  }
 };
 
 export default Home;

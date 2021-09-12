@@ -1,29 +1,30 @@
-import ApiError from '../../errors/ApiError';
+import resetApp from '../../app/resetApp';
 import User from '../../types/User';
+import fetchApi from '../../utils/fetchApi';
 
-type Record = {
-  user: User;
-  password: string;
-};
-
-const storage: Array<Record> = [];
+export async function fetchUser() {
+  return (await fetchApi('/user')) as User;
+}
 
 export type SignInParams = {
   email: string;
   password: string;
 };
 
-export async function signIn({ email, password }: SignInParams): Promise<User> {
-  const record = storage.find(({ user }) => user.email === email);
-  if (!record) {
-    throw new ApiError('Invalid email or password');
+export async function signIn(params: SignInParams) {
+  const { id } = await fetchApi('/auth/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(params),
+  });
+
+  if (typeof id !== 'string') {
+    throw new TypeError('No id');
   }
 
-  if (record.password !== password) {
-    throw new ApiError('Invalid email or password');
-  }
-
-  return record.user;
+  return id;
 }
 
 export type SignUpParams = {
@@ -33,24 +34,17 @@ export type SignUpParams = {
   password: string;
 };
 
-export async function signUp({
-  email,
-  firstName,
-  lastName,
-  password,
-}: SignUpParams) {
-  if (storage.find(({ user }) => user.email === email)) {
-    throw new ApiError(`User with email "${email}" already exists`);
-  }
-
-  storage.push({
-    user: {
-      email,
-      firstName,
-      lastName,
+export async function signUp(params: SignUpParams) {
+  await fetchApi('/user', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
     },
-    password,
+    body: JSON.stringify(params),
   });
 }
 
-export async function logout() {}
+export async function logout() {
+  await fetchApi('/auth/logout', { method: 'POST' });
+  await resetApp();
+}

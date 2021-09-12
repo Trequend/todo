@@ -1,9 +1,10 @@
 import { bcrypt, mongo, oak, validasaur } from "../deps.ts";
 import type { ApplicationState } from "../types/mod.ts";
-import { parseBody, response, sanitizeUser } from "../utils/mod.ts";
+import { parseBody, response } from "../utils/mod.ts";
+import { auth } from "../middlewares/mod.ts";
 
 const usersApi = new oak.Router<oak.RouteParams, ApplicationState>()
-  .get("/user", async (context) => {
+  .get("/user", auth(), async (context) => {
     if (!context.state.session) {
       throw new Error("No session");
     }
@@ -15,6 +16,13 @@ const usersApi = new oak.Router<oak.RouteParams, ApplicationState>()
 
     const user = await context.state.users.findOne({
       _id: new mongo.Bson.ObjectID(id),
+    }, {
+      projection: {
+        _id: 0,
+        email: 1,
+        firstName: 1,
+        lastName: 1,
+      },
     });
     if (!user) {
       return response.error(context, 404, {
@@ -22,7 +30,7 @@ const usersApi = new oak.Router<oak.RouteParams, ApplicationState>()
       });
     }
 
-    context.response.body = sanitizeUser(user);
+    context.response.body = user;
   })
   .put("/user", async (context) => {
     const user = await parseBody(context);
@@ -49,7 +57,11 @@ const usersApi = new oak.Router<oak.RouteParams, ApplicationState>()
       });
     }
 
-    if (await context.state.users.findOne({ email: user.email })) {
+    const foundUser = await context.state.users.findOne(
+      { email: user.email },
+      { projection: { _id: 1 } },
+    );
+    if (foundUser) {
       return response.error(context, 400, {
         message: `User with email "${user.email}" already exists`,
       });

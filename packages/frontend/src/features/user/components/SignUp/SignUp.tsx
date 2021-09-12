@@ -3,7 +3,7 @@ import { Button, Input, Form, Row, Col, Alert, message } from 'antd';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../../../app/store';
-import { removeSignUpError, signUp } from '../../slice';
+import { userActions } from '../../slice';
 import useAppDispatch from '../../../../hooks/useAppDispatch';
 import styles from './SignUp.module.scss';
 import { Link, useHistory } from 'react-router-dom';
@@ -17,10 +17,10 @@ const SignUp: FC = () => {
 
   const onFinish = (values: any) => {
     dispatch(
-      signUp({
+      userActions.signUp({
         email: values.email,
         firstName: values.firstName,
-        lastName: values.secondName,
+        lastName: values.lastName,
         password: values.password,
       })
     );
@@ -29,7 +29,7 @@ const SignUp: FC = () => {
 
   useEffect(() => {
     return () => {
-      dispatch(removeSignUpError());
+      dispatch(userActions.removeSignUpError());
     };
   }, [dispatch]);
 
@@ -77,10 +77,10 @@ const SignUp: FC = () => {
             </Col>
             <Col span={24} sm={12}>
               <Form.Item
-                name="secondName"
+                name="lastName"
                 rules={[{ required: true, message: 'Required field' }]}
               >
-                <Input placeholder="Second name" />
+                <Input placeholder="Last name" />
               </Form.Item>
             </Col>
           </Row>
