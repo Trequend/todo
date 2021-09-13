@@ -6,6 +6,7 @@ import { userActions } from '../../features/user/slice';
 import useAppDispatch from '../../hooks/useAppDispatch';
 import useAppSelector from '../../hooks/useAppSelector';
 import styles from './Home.module.scss';
+import HomeHeader from './components/HomeHeader';
 
 const Home: FC = () => {
   const userId = useAppSelector((state) => state.user.id);
@@ -29,10 +30,6 @@ const Home: FC = () => {
     window.location.reload();
   };
 
-  const logout = () => {
-    dispatch(userActions.logout());
-  };
-
   if (!user || userLoading) {
     return (
       <div className={styles.userInfo}>
@@ -52,18 +49,9 @@ const Home: FC = () => {
       </div>
     );
   } else {
-    console.log(user);
     return (
-      <div className={styles.userInfo}>
-        <h1>{user.firstName}</h1>
-        <Button
-          type="primary"
-          onClick={logout}
-          htmlType="button"
-          loading={logoutPending}
-        >
-          Logout
-        </Button>
+      <div>
+        <HomeHeader user={user} />
       </div>
     );
   }

@@ -1,0 +1,34 @@
+.extra {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+
+  & > * {
+    margin-left: 12px;
+  }
+}
+
+.settingsButtons {
+  display: flex;
+  min-width: 120px;
+  align-items: stretch;
+  flex-direction: column;
+
+  & > button {
+    display: block;
+    margin-bottom: 5px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.notificationButton {
+  cursor: pointer;
+}
+
+.extraIcon {
+  font-size: 20px;
+}
