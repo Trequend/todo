@@ -1,13 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 import User from '../../types/User';
+import addSseEventsListeners from '../../utils/addSseEventsListeners';
 import addTaskHandler, { WithTask } from '../../utils/addTaskHandler';
 import createApiTask from '../../utils/createApiTask';
+import createSseConnectionTasks from '../../utils/createSseConnectionTasks';
 import * as api from './api';
 
 type State = {
   id?: string;
   data?: User;
-} & WithTask<'fetch'> &
+} & WithTask<'connect'> &
   WithTask<'signIn'> &
   WithTask<'signUp'> &
   WithTask<'logout'>;
@@ -15,14 +17,28 @@ type State = {
 const SLICE_NAME = 'user';
 
 export const userInitialState: State = {
-  fetchPending: false,
   signInPending: false,
   signUpPending: false,
   logoutPending: false,
 };
 
+const { eventsPrefix, connect, disconnect } = createSseConnectionTasks(
+  SLICE_NAME,
+  'user',
+  {
+    endpoint: '/user/sse',
+    waitEvent: 'init',
+    sseEvents: ['init', 'error', 'open'],
+    connectionOptions: {
+      withCredentials: true,
+      withCSRFToken: true,
+    },
+  }
+);
+
 const tasks = {
-  fetchUser: createApiTask(SLICE_NAME, 'fetchUser', api.fetchUser),
+  connect,
+  disconnect,
   signIn: createApiTask(SLICE_NAME, 'signIn', api.signIn),
   signUp: createApiTask(SLICE_NAME, 'signUp', api.signUp),
   logout: createApiTask(SLICE_NAME, 'logout', api.logout),
@@ -43,11 +59,7 @@ const slice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    addTaskHandler('fetch', builder, tasks.fetchUser, {
-      onFulfill(state, { payload: user }) {
-        state.data = user;
-      },
-    });
+    addTaskHandler('connect', builder, tasks.connect);
 
     addTaskHandler('signIn', builder, tasks.signIn, {
       onFulfill(state, { payload: id }) {
@@ -56,7 +68,22 @@ const slice = createSlice({
     });
 
     addTaskHandler('signUp', builder, tasks.signUp);
+
     addTaskHandler('logout', builder, tasks.logout);
+
+    addSseEventsListeners(eventsPrefix, builder, {
+      listeners: {
+        open: (state) => {
+          state.connectError = undefined;
+        },
+        init: (state, { data }) => {
+          state.data = data;
+        },
+        error: (state) => {
+          state.connectError = 'Connection lost';
+        },
+      },
+    });
   },
 });
 

@@ -8,6 +8,8 @@ export default function csrfGuard(): oak.Middleware<ApplicationState> {
       throw new Error("No session");
     }
 
+    console.log(context.state.session);
+
     if (context.state.session.withCSRFToken) {
       await next();
     } else {

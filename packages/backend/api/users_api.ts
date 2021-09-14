@@ -4,7 +4,7 @@ import { parseBody, response } from "../utils/mod.ts";
 import { auth } from "../middlewares/mod.ts";
 
 const usersApi = new oak.Router<oak.RouteParams, ApplicationState>()
-  .get("/user", auth(), async (context) => {
+  .get("/user/sse", auth(), async (context) => {
     if (!context.state.session) {
       throw new Error("No session");
     }
@@ -30,7 +30,8 @@ const usersApi = new oak.Router<oak.RouteParams, ApplicationState>()
       });
     }
 
-    context.response.body = user;
+    const target = response.startSSE(context);
+    target.dispatchEvent(new oak.ServerSentEvent("init", user));
   })
   .put("/user", async (context) => {
     const user = await parseBody(context);

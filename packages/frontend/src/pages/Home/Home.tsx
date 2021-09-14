@@ -11,15 +11,18 @@ import HomeHeader from './components/HomeHeader';
 const Home: FC = () => {
   const userId = useAppSelector((state) => state.user.id);
   const user = useAppSelector((state) => state.user.data);
-  const userLoading = useAppSelector((state) => state.user.fetchPending);
-  const userError = useAppSelector((state) => state.user.fetchError);
-  const logoutPending = useAppSelector((state) => state.user.logoutPending);
+  const userLoading = useAppSelector((state) => state.user.connectPending);
+  const userError = useAppSelector((state) => state.user.connectError);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (userId) {
-      dispatch(userActions.fetchUser());
+      dispatch(userActions.connect());
     }
+
+    return () => {
+      dispatch(userActions.disconnect());
+    };
   }, [dispatch, userId]);
 
   if (!userId) {
@@ -30,7 +33,7 @@ const Home: FC = () => {
     window.location.reload();
   };
 
-  if (!user || userLoading) {
+  if (!user || userLoading || userError) {
     return (
       <div className={styles.userInfo}>
         {userLoading ? (

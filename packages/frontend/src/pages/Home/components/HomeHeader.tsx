@@ -1,13 +1,5 @@
 import { BellOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
-import {
-  Badge,
-  Button,
-  Drawer,
-  Empty,
-  notification,
-  PageHeader,
-  Popover,
-} from 'antd';
+import { Badge, Drawer, Empty, notification, PageHeader, Popover } from 'antd';
 import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
 import { FC, useEffect, useState } from 'react';
 import FormattedDate from '../../../components/FormattedDate';
@@ -51,7 +43,7 @@ const HomeHeader: FC<Props> = ({ user }) => {
           breakpoints.sm ? <FormattedDate format={'dddd HH:mm'} /> : null
         }
         extra={[
-          <div className={styles.extra}>
+          <div className={styles.extra} key={0}>
             <Badge dot offset={['-2px', '0']}>
               <BellOutlined
                 className={`${styles.extraIcon} ${styles.notificationsButton}`}

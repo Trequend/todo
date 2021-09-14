@@ -2,6 +2,7 @@ import {
   ActionReducerMapBuilder,
   AsyncThunk,
   CaseReducer,
+  Draft,
   PayloadAction,
 } from '@reduxjs/toolkit';
 
@@ -31,7 +32,25 @@ type TaskReducer<
   >
 >;
 
-export default function addTaskHandler<
+function addTaskHandler<
+  TaskName extends string,
+  State,
+  Returned,
+  ThunkArg,
+  Target extends WithTask<TaskName>
+>(
+  name: TaskName,
+  builder: ActionReducerMapBuilder<State>,
+  thunk: AsyncThunk<Returned, ThunkArg, {}>,
+  options: {
+    selector: (state: Draft<State>, arg: ThunkArg) => Target | undefined;
+    onPending?: TaskReducer<State, ThunkArg, Returned, 'pending'>;
+    onFulfill?: TaskReducer<State, ThunkArg, Returned, 'fulfilled'>;
+    onReject?: TaskReducer<State, ThunkArg, unknown, 'rejected'>;
+  }
+): void;
+
+function addTaskHandler<
   TaskName extends string,
   State extends WithTask<TaskName>,
   Returned,
@@ -40,7 +59,25 @@ export default function addTaskHandler<
   name: TaskName,
   builder: ActionReducerMapBuilder<State>,
   thunk: AsyncThunk<Returned, ThunkArg, {}>,
+  options?: {
+    onPending?: TaskReducer<State, ThunkArg, Returned, 'pending'>;
+    onFulfill?: TaskReducer<State, ThunkArg, Returned, 'fulfilled'>;
+    onReject?: TaskReducer<State, ThunkArg, unknown, 'rejected'>;
+  }
+): void;
+
+function addTaskHandler<
+  TaskName extends string,
+  State,
+  Returned,
+  ThunkArg,
+  Target extends WithTask<TaskName>
+>(
+  name: TaskName,
+  builder: ActionReducerMapBuilder<State>,
+  thunk: AsyncThunk<Returned, ThunkArg, {}>,
   options: {
+    selector?: (state: Draft<State>, arg: ThunkArg) => Target | undefined;
     onPending?: TaskReducer<State, ThunkArg, Returned, 'pending'>;
     onFulfill?: TaskReducer<State, ThunkArg, Returned, 'fulfilled'>;
     onReject?: TaskReducer<State, ThunkArg, unknown, 'rejected'>;
@@ -48,21 +85,39 @@ export default function addTaskHandler<
 ) {
   const pendingField = `${name}Pending`;
   const errorField = `${name}Error`;
+  const selector = options.selector;
 
   builder.addCase(thunk.pending, (state, action) => {
-    (state as any)[pendingField] = true;
+    const target: any = selector ? selector(state, action.meta.arg) : state;
+    if (!target) {
+      return;
+    }
+
+    target[pendingField] = true;
     options.onPending && options.onPending(state, action);
   });
 
   builder.addCase(thunk.fulfilled, (state, action) => {
-    (state as any)[pendingField] = false;
-    (state as any)[errorField] = undefined;
+    const target: any = selector ? selector(state, action.meta.arg) : state;
+    if (!target) {
+      return;
+    }
+
+    target[pendingField] = false;
+    target[errorField] = undefined;
     options.onFulfill && options.onFulfill(state, action);
   });
 
   builder.addCase(thunk.rejected, (state, action) => {
-    (state as any)[pendingField] = false;
-    (state as any)[errorField] = action.error.message;
+    const target: any = selector ? selector(state, action.meta.arg) : state;
+    if (!target) {
+      return;
+    }
+
+    target[pendingField] = false;
+    target[errorField] = action.error.message;
     options.onReject && options.onReject(state, action);
   });
 }
+
+export default addTaskHandler;

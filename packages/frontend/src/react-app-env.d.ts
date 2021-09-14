@@ -5,3 +5,5 @@ declare namespace NodeJS {
     REACT_APP_API_URL: string | undefined;
   }
 }
+
+declare module 'event-source-polyfill';

@@ -39,6 +39,20 @@ const response = {
   internalError(context: oak.Context): void {
     this.error(context, 500);
   },
+
+  startSSE(context: oak.Context): oak.ServerSentEventTarget {
+    const headers = new Headers([["X-Accel-Buffering", "no"]]);
+    const target = context.sendEvents({ headers });
+    const interval = setInterval(() => {
+      target.dispatchComment("ping");
+    }, 20000);
+
+    target.addEventListener("close", () => {
+      clearInterval(interval);
+    });
+
+    return target;
+  },
 };
 
 export default response;
