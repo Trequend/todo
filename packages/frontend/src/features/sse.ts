@@ -1,4 +1,5 @@
 import { EventSourcePolyfill } from 'event-source-polyfill';
+import { UnauthorizedError } from '../errors/UnauthorizedError';
 import getCookie from '../utils/getCookie';
 
 const connections = new Map<object, EventSource>();
@@ -44,23 +45,24 @@ async function connect<T = any>(
     }) as EventSource;
 
     connection.addEventListener('open', (event) => {
-      console.log('Open', event);
       connections.set(key, connection);
       onOpen && onOpen(event);
       resolve(key);
     });
 
     connection.addEventListener('error', (event) => {
-      console.log('Error', event);
       if (!connections.get(key)) {
-        reject(new Error(`Failed to connect to "${url}"`));
+        if ((event as any).status === 401) {
+          reject(new UnauthorizedError());
+        } else {
+          reject(new Error(`Failed to connect to "${url}"`));
+        }
       } else {
         onError && onError(event);
       }
     });
 
     connection.addEventListener('message', (event) => {
-      console.log('Message', event);
       onMessage && onMessage(event as MessageEvent<T>);
     });
 
@@ -69,7 +71,6 @@ async function connect<T = any>(
         return;
       }
 
-      console.log(`Add ${type}`);
       connection.addEventListener(type, (event) => {
         listener(event as MessageEvent<T>);
       });

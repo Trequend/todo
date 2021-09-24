@@ -11,12 +11,13 @@ import HomeHeader from './components/HomeHeader';
 const Home: FC = () => {
   const userId = useAppSelector((state) => state.user.id);
   const user = useAppSelector((state) => state.user.data);
-  const userLoading = useAppSelector((state) => state.user.connectPending);
-  const userError = useAppSelector((state) => state.user.connectError);
+  const userLoading = useAppSelector((state) => state.user.fetchPending);
+  const userError = useAppSelector((state) => state.user.fetchError);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (userId) {
+      dispatch(userActions.fetchUser());
       dispatch(userActions.connect());
     }
 

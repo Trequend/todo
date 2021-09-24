@@ -1,5 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import resetApp from '../app/resetApp';
 import SseError from '../errors/SseError';
+import { UnauthorizedError } from '../errors/UnauthorizedError';
 import { sse, SseConnectOptions } from '../features/sse';
 
 function createSseConnectionTasks(
@@ -28,8 +30,6 @@ function createSseConnectionTasks(
             ? [options.waitEvent, ...options.sseEvents]
             : options.sseEvents,
           (eventName, data) => {
-            console.log('Event: ', eventName);
-            console.log('Data: ', data);
             const actionType = `${eventsPrefix}/${eventName}`;
             dispatch({ type: actionType, data });
             if (eventName === options.waitEvent) {
@@ -48,6 +48,12 @@ function createSseConnectionTasks(
             resolve();
           }
         } catch (error) {
+          if (error instanceof UnauthorizedError) {
+            await resetApp();
+            reject(error);
+            return;
+          }
+
           if (process.env.NODE_ENV === 'development') {
             console.error(error);
           }
@@ -92,7 +98,6 @@ function createEventsListeners(
       return [
         eventName,
         (event: MessageEvent) => {
-          console.log(eventName, event);
           onEvent(eventName, JSON.parse(event.data));
         },
       ];
@@ -103,8 +108,6 @@ function createEventsListeners(
         [eventName]: listener,
       };
     }, {});
-
-  console.log(listeners);
 
   return {
     onOpen: containsOpenEvent ? () => onEvent('open') : undefined,

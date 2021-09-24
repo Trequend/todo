@@ -29,6 +29,10 @@ export default async function fetchApi(input: RequestInfo, init?: RequestInit) {
     }
   }
 
-  const json = await response.json();
-  return json;
+  try {
+    const json = await response.json();
+    return json;
+  } catch {
+    return {};
+  }
 }

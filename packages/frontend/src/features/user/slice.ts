@@ -9,25 +9,21 @@ import * as api from './api';
 type State = {
   id?: string;
   data?: User;
-} & WithTask<'connect'> &
+} & WithTask<'fetch'> &
+  WithTask<'connect'> &
   WithTask<'signIn'> &
   WithTask<'signUp'> &
   WithTask<'logout'>;
 
 const SLICE_NAME = 'user';
 
-export const userInitialState: State = {
-  signInPending: false,
-  signUpPending: false,
-  logoutPending: false,
-};
+export const userInitialState: State = {};
 
 const { eventsPrefix, connect, disconnect } = createSseConnectionTasks(
   SLICE_NAME,
   'user',
   {
     endpoint: '/user/sse',
-    waitEvent: 'init',
     sseEvents: ['init', 'error', 'open'],
     connectionOptions: {
       withCredentials: true,
@@ -39,6 +35,7 @@ const { eventsPrefix, connect, disconnect } = createSseConnectionTasks(
 const tasks = {
   connect,
   disconnect,
+  fetchUser: createApiTask(SLICE_NAME, 'fetchUser', api.fetchUser),
   signIn: createApiTask(SLICE_NAME, 'signIn', api.signIn),
   signUp: createApiTask(SLICE_NAME, 'signUp', api.signUp),
   logout: createApiTask(SLICE_NAME, 'logout', api.logout),
@@ -59,6 +56,12 @@ const slice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    addTaskHandler('fetch', builder, tasks.fetchUser, {
+      onFulfill(state, { payload: user }) {
+        state.data = user;
+      },
+    });
+
     addTaskHandler('connect', builder, tasks.connect);
 
     addTaskHandler('signIn', builder, tasks.signIn, {

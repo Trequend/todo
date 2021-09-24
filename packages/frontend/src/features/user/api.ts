@@ -3,7 +3,8 @@ import User from '../../types/User';
 import fetchApi from '../../utils/fetchApi';
 
 export async function fetchUser() {
-  return (await fetchApi('/user')) as User;
+  const user: User = await fetchApi('/user');
+  return user;
 }
 
 export type SignInParams = {
@@ -36,7 +37,7 @@ export type SignUpParams = {
 
 export async function signUp(params: SignUpParams) {
   await fetchApi('/user', {
-    method: 'PUT',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
