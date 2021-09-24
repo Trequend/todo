@@ -5,6 +5,7 @@ import {
   MongooseModule,
 } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
+import { MODEL } from './constants';
 import { WatchModelService } from './watch-model.service';
 
 @Module({
@@ -20,7 +21,7 @@ export class WatchModelModule {
       imports: [databaseModule],
       providers: [
         {
-          provide: 'MODEL',
+          provide: MODEL,
           useFactory: (connection: Connection) => {
             return connection.model(model.name, model.schema);
           },

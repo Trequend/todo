@@ -7,6 +7,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './schemas/user.schema';
 import { FilteredUser } from './types/filtered-user';
 import { UsersService } from './users.service';
+import { Types } from 'mongoose';
 
 @Controller('user')
 export class UsersController {
@@ -36,8 +37,19 @@ export class UsersController {
   @Auth()
   @Sse('sse')
   sse(@UserId() userId: string): Observable<MessageEvent> {
-    return this.watchModelService.stream(userId, (user) => {
-      return this.usersService.filterUser(user);
-    });
+    return this.watchModelService.watch(
+      [
+        {
+          $match: {
+            'fullDocument._id': new Types.ObjectId(userId),
+          },
+        },
+      ],
+      {
+        transform: (user) => {
+          return this.usersService.filterUser(user);
+        },
+      }
+    );
   }
 }
