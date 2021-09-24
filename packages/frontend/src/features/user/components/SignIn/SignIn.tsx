@@ -1,5 +1,5 @@
 import { FC, useEffect } from 'react';
-import { Button, Input, Form, Checkbox, Alert } from 'antd';
+import { Button, Input, Form, Alert } from 'antd';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../../../app/store';
@@ -60,9 +60,6 @@ const SignIn: FC = () => {
               prefix={<LockOutlined className={styles.formIcon} />}
               placeholder="Password"
             />
-          </Form.Item>
-          <Form.Item name="remember" valuePropName="checked">
-            <Checkbox>Remember me</Checkbox>
           </Form.Item>
           <Form.Item>
             <Button
