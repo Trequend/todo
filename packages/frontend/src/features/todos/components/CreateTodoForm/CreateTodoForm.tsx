@@ -1,6 +1,7 @@
-import { Button, Form, Input } from 'antd';
+import { Form, Input } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { FC } from 'react';
+import { Button } from '../../../../components/Button/Button';
 import { useAppDispatch } from '../../../../hooks/useAppDispatch';
 import { useAppSelector } from '../../../../hooks/useAppSelector';
 import { todosActions } from '../../slice';
@@ -37,7 +38,12 @@ export const CreateTodoForm: FC = () => {
           autoSize={{ minRows: 3, maxRows: 6 }}
         />
       </Form.Item>
-      <Button type="primary" loading={pending} htmlType="submit">
+      <Button
+        type="primary"
+        loadingDelay={500}
+        loading={pending}
+        htmlType="submit"
+      >
         Create
       </Button>
     </Form>

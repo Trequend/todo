@@ -1,5 +1,6 @@
 import { FC, useEffect } from 'react';
-import { Button, Input, Form, Alert } from 'antd';
+import { Input, Form, Alert } from 'antd';
+import { Button } from '../../../../components/Button/Button';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../../../app/store';
@@ -69,6 +70,7 @@ export const SignIn: FC = () => {
               type="primary"
               className={styles.button}
               loading={loading}
+              loadingDelay={500}
             >
               Sign In
             </Button>

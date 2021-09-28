@@ -1,4 +1,5 @@
-import { Button, ButtonProps } from 'antd';
+import { ButtonProps } from 'antd';
+import { Button } from '../../../components/Button/Button';
 import { FC } from 'react';
 import { STORE_KEYS } from '../../../app/persistentStore';
 import { useAppDispatch } from '../../../hooks/useAppDispatch';
@@ -18,7 +19,7 @@ export const LogoutButton: FC<Props> = ({
   const dispatch = useAppDispatch();
 
   const onClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    if (!authorized) {
+    if (pending || !authorized) {
       return;
     }
 
@@ -32,6 +33,7 @@ export const LogoutButton: FC<Props> = ({
       onClick={onClick}
       loading={pending}
       disabled={!authorized}
+      loadingDelay={500}
     >
       {children ?? 'Logout'}
     </Button>
