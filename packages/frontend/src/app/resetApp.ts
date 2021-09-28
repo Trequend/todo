@@ -1,9 +1,5 @@
-import persistentStorage from './persistentStore';
+import { persistentStore } from './persistentStore';
 
-export default async function resetApp() {
-  // Endless promise for app lock
-  return new Promise(() => {
-    persistentStorage.clear();
-    window.location.reload();
-  });
+export default function resetApp() {
+  persistentStore.clear();
 }

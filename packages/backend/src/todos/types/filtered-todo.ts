@@ -1,7 +1,5 @@
-type Todo = {
+export type FilteredTodo = {
   id: string;
   text: string;
   done: boolean;
 };
-
-export default Todo;

@@ -1,7 +1,9 @@
 import { Button, ButtonProps } from 'antd';
 import { FC } from 'react';
+import { STORE_KEYS } from '../../../app/persistentStore';
 import useAppDispatch from '../../../hooks/useAppDispatch';
 import useAppSelector from '../../../hooks/useAppSelector';
+import { usePersistentStore } from '../../../hooks/usePersistentStore';
 import { userActions } from '../slice';
 
 type Props = Omit<ButtonProps, 'loading'>;
@@ -11,12 +13,12 @@ const LogoutButton: FC<Props> = ({
   children,
   ...props
 }) => {
-  const userId = useAppSelector((state) => state.user.id);
+  const authorized = usePersistentStore(STORE_KEYS.AUTHORIZED);
   const pending = useAppSelector((state) => state.user.logoutPending);
   const dispatch = useAppDispatch();
 
   const onClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    if (!userId) {
+    if (!authorized) {
       return;
     }
 
@@ -25,7 +27,12 @@ const LogoutButton: FC<Props> = ({
   };
 
   return (
-    <Button {...props} onClick={onClick} loading={pending} disabled={!userId}>
+    <Button
+      {...props}
+      onClick={onClick}
+      loading={pending}
+      disabled={!authorized}
+    >
       {children ?? 'Logout'}
     </Button>
   );

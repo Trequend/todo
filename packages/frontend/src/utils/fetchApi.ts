@@ -1,6 +1,7 @@
 import ApiError from '../errors/ApiError';
 import getCookie from './getCookie';
 import resetApp from '../app/resetApp';
+import { UnauthorizedError } from '../errors/UnauthorizedError';
 
 export default async function fetchApi(input: RequestInfo, init?: RequestInit) {
   const options = init ?? {};
@@ -15,7 +16,8 @@ export default async function fetchApi(input: RequestInfo, init?: RequestInit) {
   });
 
   if (response.status === 401) {
-    await resetApp();
+    resetApp();
+    throw new UnauthorizedError();
   } else if (!response.ok) {
     try {
       const json = await response.json();

@@ -1,25 +1,115 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Todo } from '../../types';
-import { WithTask } from '../../utils/addTaskHandler';
+import addSseEventsListeners from '../../utils/addSseEventsListeners';
+import addTaskHandler, { WithTask } from '../../utils/addTaskHandler';
+import { arrayToObject } from '../../utils/arrayToObject';
+import createApiTask from '../../utils/createApiTask';
+import createSseConnectionTasks from '../../utils/createSseConnectionTasks';
+import * as api from './api';
 
 type State = {
-  list: Array<Todo & WithTask<'changeDone'> & WithTask<'delete'>>;
-};
+  list: Record<
+    string,
+    Omit<Todo, 'id'> & WithTask<'change'> & WithTask<'delete'>
+  >;
+} & WithTask<'fetch'> &
+  WithTask<'create'>;
 
 const SLICE_NAME = 'todos';
 
 export const todosInitialState: State = {
-  list: [],
+  list: {},
+};
+
+const { eventsPrefix, connect, disconnect } = createSseConnectionTasks(
+  SLICE_NAME,
+  'todos',
+  {
+    endpoint: '/todos/sse',
+    sseEvents: ['init', 'delete', 'error', 'open'],
+    connectionOptions: {
+      withCredentials: true,
+      withCSRFToken: true,
+    },
+  }
+);
+
+const tasks = {
+  connect,
+  disconnect,
+  fetchTodos: createApiTask(SLICE_NAME, 'fetch', api.fetchTodos),
+  createTodo: createApiTask(SLICE_NAME, 'create', api.createTodo),
+  changeTodo: createApiTask(SLICE_NAME, 'change', api.changeTodo),
+  deleteTodo: createApiTask(SLICE_NAME, 'delete', api.deleteTodo),
 };
 
 const slice = createSlice({
   name: SLICE_NAME,
   initialState: todosInitialState,
-  reducers: {},
+  reducers: {
+    changeTodoLocal(state, { payload }: { payload: api.ChangeTodoParams }) {
+      const { id, ...rest } = payload;
+      const todo = state.list[payload.id];
+      state.list[payload.id] = {
+        ...todo,
+        ...rest,
+      };
+    },
+    deleteTodoLocal(state, { payload: id }: { payload: string }) {
+      delete state.list[id];
+    },
+  },
+  extraReducers: (builder) => {
+    addTaskHandler('fetch', builder, tasks.fetchTodos, {
+      onFulfill(state, { payload: todos }) {
+        state.list = arrayToObject(todos);
+      },
+    });
+
+    addTaskHandler('create', builder, tasks.createTodo);
+
+    addTaskHandler('change', builder, tasks.changeTodo, {
+      selector(state, { id }) {
+        return state.list[id];
+      },
+      onFulfill(state, { payload: todo }) {
+        if (todo) {
+          const { id, ...rest } = todo;
+          state.list[id] = rest;
+        }
+      },
+    });
+
+    addTaskHandler('delete', builder, tasks.deleteTodo, {
+      selector(state, id) {
+        return state.list[id];
+      },
+      onFulfill(state, { meta }) {
+        delete state.list[meta.arg];
+      },
+    });
+
+    addSseEventsListeners(eventsPrefix, builder, {
+      listeners: {
+        init: (state, { data: todo }) => {
+          state.list[todo.id] = {
+            ...todo,
+            id: undefined,
+          };
+        },
+        delete: (state, { data }) => {
+          if (data && data.id) {
+            delete state.list[data.id];
+          }
+        },
+      },
+    });
+  },
 });
 
 export const todosActions = {
   ...slice.actions,
+  ...tasks,
 };
 
 export const todosReducer = slice.reducer;

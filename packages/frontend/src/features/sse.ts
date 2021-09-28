@@ -38,6 +38,7 @@ async function connect<T = any>(
           'X-XSRF-TOKEN': getCookie('XSRF-TOKEN'),
         }
       : undefined;
+
     const connection = new EventSourcePolyfill(url, {
       withCredentials,
       headers,

@@ -1,0 +1,39 @@
+.root {
+  display: flex;
+  width: 100%;
+  align-items: center;
+
+  & > *,
+  & form > * {
+    flex: 0 0 auto;
+    margin: 0;
+    margin-right: 10px !important;
+
+    &:last-child {
+      margin-right: 0 !important;
+    }
+  }
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input {
+  flex: 1 1 auto !important;
+}
+
+.text {
+  flex: 1 1 auto;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.editorText {
+  flex: 1 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

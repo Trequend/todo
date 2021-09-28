@@ -49,7 +49,7 @@ function createSseConnectionTasks(
           }
         } catch (error) {
           if (error instanceof UnauthorizedError) {
-            await resetApp();
+            resetApp();
             reject(error);
             return;
           }

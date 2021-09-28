@@ -10,7 +10,7 @@ import { Link, useHistory } from 'react-router-dom';
 
 const SignUp: FC = () => {
   const history = useHistory();
-  const [formSubmited, setFormSubmited] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const loading = useSelector((state: AppState) => state.user.signUpPending);
   const error = useSelector((state: AppState) => state.user.signUpError);
   const dispatch = useAppDispatch();
@@ -24,7 +24,7 @@ const SignUp: FC = () => {
         password: values.password,
       })
     );
-    setFormSubmited(true);
+    setFormSubmitted(true);
   };
 
   useEffect(() => {
@@ -34,13 +34,13 @@ const SignUp: FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (formSubmited && !loading && !error) {
+    if (formSubmitted && !loading && !error) {
       message.success('User registered');
       history.push('/signin');
     } else if (!loading) {
-      setFormSubmited(false);
+      setFormSubmitted(false);
     }
-  }, [history, formSubmited, loading, error]);
+  }, [history, formSubmitted, loading, error]);
 
   return (
     <div className={styles.root}>

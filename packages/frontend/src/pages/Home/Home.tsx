@@ -1,61 +1,54 @@
-import { LoadingOutlined } from '@ant-design/icons';
-import { Button, Spin } from 'antd';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { Redirect } from 'react-router-dom';
+import { STORE_KEYS } from '../../app/persistentStore';
+import Indicator from '../../components/Indicator/Indicator';
+import { TodosList } from '../../features/todos/components';
 import { userActions } from '../../features/user/slice';
 import useAppDispatch from '../../hooks/useAppDispatch';
 import useAppSelector from '../../hooks/useAppSelector';
-import styles from './Home.module.scss';
+import { usePersistentStore } from '../../hooks/usePersistentStore';
 import HomeHeader from './components/HomeHeader';
+import styles from './Home.module.scss';
 
 const Home: FC = () => {
-  const userId = useAppSelector((state) => state.user.id);
-  const user = useAppSelector((state) => state.user.data);
-  const userLoading = useAppSelector((state) => state.user.fetchPending);
-  const userError = useAppSelector((state) => state.user.fetchError);
+  const authorized = usePersistentStore(STORE_KEYS.AUTHORIZED);
+  const loading = useAppSelector((state) => state.user.fetchPending);
+  const error = useAppSelector((state) => state.user.fetchError);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    if (userId) {
-      dispatch(userActions.fetchUser());
-      dispatch(userActions.connect());
-    }
+  const connect = useMemo(() => {
+    return () => {
+      if (authorized) {
+        dispatch(userActions.fetchUser());
+        dispatch(userActions.connect());
+      }
+    };
+  }, [authorized, dispatch]);
 
+  const disconnect = useMemo(() => {
     return () => {
       dispatch(userActions.disconnect());
     };
-  }, [dispatch, userId]);
+  }, [dispatch]);
 
-  if (!userId) {
+  useEffect(() => {
+    connect();
+    return disconnect;
+  }, [connect, disconnect]);
+
+  if (!authorized) {
     return <Redirect to="/signin" />;
   }
 
-  const reload = () => {
-    window.location.reload();
-  };
-
-  if (!user || userLoading || userError) {
-    return (
-      <div className={styles.userInfo}>
-        {userLoading ? (
-          <Spin
-            indicator={<LoadingOutlined className={styles.userLoadingIcon} />}
-            delay={500}
-          />
-        ) : (
-          <>
-            <h2>{userError ? `${userError}` : 'Unknown error occured'}</h2>
-            <Button type="primary" htmlType="button" onClick={reload}>
-              Reload
-            </Button>
-          </>
-        )}
-      </div>
-    );
+  if (loading || error) {
+    return <Indicator loading={loading} error={error} onReload={connect} />;
   } else {
     return (
-      <div>
-        <HomeHeader user={user} />
+      <div className={styles.root}>
+        <HomeHeader className={styles.header} />
+        <div className={styles.todos}>
+          <TodosList />
+        </div>
       </div>
     );
   }

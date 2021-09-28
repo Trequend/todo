@@ -1,18 +1,18 @@
 import { CheckOutlined } from '@ant-design/icons';
 import { FC } from 'react';
-import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
-import { AppState } from '../../app/store';
+import { STORE_KEYS } from '../../app/persistentStore';
 import { SignIn, SignUp } from '../../features/user/components';
+import { usePersistentStore } from '../../hooks/usePersistentStore';
 import createAnimationClassNames from '../../utils/createAnimationClassNames';
 import styles from './Login.module.scss';
 
 const Login: FC = () => {
   const location = useLocation();
-  const userId = useSelector((state: AppState) => state.user.id);
+  const authorized = usePersistentStore(STORE_KEYS.AUTHORIZED);
 
-  if (userId) {
+  if (authorized) {
     return <Redirect to="/" />;
   }
 

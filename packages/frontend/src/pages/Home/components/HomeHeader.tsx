@@ -1,35 +1,35 @@
-import { BellOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
-import { Badge, Drawer, Empty, notification, PageHeader, Popover } from 'antd';
+import { PlusOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { Alert, Drawer, PageHeader, Popover } from 'antd';
 import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import FormattedDate from '../../../components/FormattedDate';
+import { CreateTodoForm } from '../../../features/todos/components';
 import { LogoutButton } from '../../../features/user/components';
-import User from '../../../types/User';
+import useAppSelector from '../../../hooks/useAppSelector';
 import styles from './HomeHeader.module.scss';
 
 type Props = {
-  user: User;
+  className?: string;
 };
 
-const HomeHeader: FC<Props> = ({ user }) => {
+const HomeHeader: FC<Props> = ({ className }) => {
   const breakpoints = useBreakpoint();
-  const [notificationsVisible, setNotificationsVisible] = useState(false);
+  const user = useAppSelector((state) => state.user.data);
+  const [addTodoVisible, setAddTodoVisible] = useState(false);
 
-  useEffect(() => {
-    if (notificationsVisible) {
-      notification.destroy();
-    }
-  }, [notificationsVisible]);
+  if (!user) {
+    return <Alert message="Error" description="No user" type="error" />;
+  }
 
   return (
-    <>
+    <header className={className}>
       <Drawer
-        visible={notificationsVisible}
-        title="Notifications"
-        onClose={() => setNotificationsVisible(false)}
+        visible={addTodoVisible}
+        title="Create todo"
+        onClose={() => setAddTodoVisible(false)}
         width={breakpoints.sm ? '400px' : undefined}
       >
-        <Empty description="No Notifications" />
+        <CreateTodoForm />
       </Drawer>
       <PageHeader
         avatar={{
@@ -44,14 +44,12 @@ const HomeHeader: FC<Props> = ({ user }) => {
         }
         extra={[
           <div className={styles.extra} key={0}>
-            <Badge dot offset={['-2px', '0']}>
-              <BellOutlined
-                className={`${styles.extraIcon} ${styles.notificationsButton}`}
-                tabIndex={-1}
-                role="button"
-                onClick={() => setNotificationsVisible(true)}
-              />
-            </Badge>
+            <PlusOutlined
+              className={`${styles.extraIcon} ${styles.notificationsButton}`}
+              tabIndex={-1}
+              role="button"
+              onClick={() => setAddTodoVisible(true)}
+            />
             <Popover
               content={
                 <div className={styles.settingsButtons}>
@@ -67,7 +65,7 @@ const HomeHeader: FC<Props> = ({ user }) => {
           </div>,
         ]}
       />
-    </>
+    </header>
   );
 };
 

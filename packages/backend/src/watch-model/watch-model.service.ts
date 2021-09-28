@@ -1,5 +1,5 @@
 import { Inject, Injectable, MessageEvent } from '@nestjs/common';
-import { Model } from 'mongoose';
+import { Document, Model } from 'mongoose';
 import { interval, map, merge, Observable } from 'rxjs';
 import { MODEL } from './constants';
 
@@ -58,10 +58,20 @@ export class WatchModelService<TModel, TDocument = TModel & Document> {
               });
               break;
             case 'update':
-              subscriber.next({
-                type: 'init',
-                data: JSON.stringify(document),
-              });
+              if (event.updateDescription.updatedFields.deleted) {
+                subscriber.next({
+                  type: 'delete',
+                  data: {
+                    id: event.fullDocument._id.toString(),
+                  },
+                });
+              } else {
+                subscriber.next({
+                  type: 'init',
+                  data: JSON.stringify(document),
+                });
+              }
+
               break;
           }
         })

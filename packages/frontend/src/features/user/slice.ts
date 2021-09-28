@@ -7,7 +7,6 @@ import createSseConnectionTasks from '../../utils/createSseConnectionTasks';
 import * as api from './api';
 
 type State = {
-  id?: string;
   data?: User;
 } & WithTask<'fetch'> &
   WithTask<'connect'> &
@@ -64,11 +63,7 @@ const slice = createSlice({
 
     addTaskHandler('connect', builder, tasks.connect);
 
-    addTaskHandler('signIn', builder, tasks.signIn, {
-      onFulfill(state, { payload: id }) {
-        state.id = id;
-      },
-    });
+    addTaskHandler('signIn', builder, tasks.signIn);
 
     addTaskHandler('signUp', builder, tasks.signUp);
 

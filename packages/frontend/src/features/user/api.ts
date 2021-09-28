@@ -1,3 +1,4 @@
+import { persistentStore, STORE_KEYS } from '../../app/persistentStore';
 import resetApp from '../../app/resetApp';
 import User from '../../types/User';
 import fetchApi from '../../utils/fetchApi';
@@ -13,7 +14,7 @@ export type SignInParams = {
 };
 
 export async function signIn(params: SignInParams) {
-  const { id } = await fetchApi('/auth/login', {
+  await fetchApi('/auth/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -21,11 +22,7 @@ export async function signIn(params: SignInParams) {
     body: JSON.stringify(params),
   });
 
-  if (typeof id !== 'string') {
-    throw new TypeError('No id');
-  }
-
-  return id;
+  persistentStore.setItem(STORE_KEYS.AUTHORIZED, 'true');
 }
 
 export type SignUpParams = {
