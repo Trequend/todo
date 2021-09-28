@@ -5,11 +5,10 @@
     "body": [
       "import { FC } from 'react';",
       "",
-      "const $1: FC = () => {",
+      "export const $1: FC = () => {",
       "  $0",
       "};",
-      "",
-      "export default $1;"
+      ""
     ]
   },
   "Functional component with props": {
@@ -22,11 +21,10 @@
       "  $0",
       "};",
       "",
-      "const $1: FC<Props> = ({  }) => {",
+      "export const $1: FC<Props> = ({  }) => {",
       "  ",
       "};",
-      "",
-      "export default $1;"
+      ""
     ]
   }
 }
