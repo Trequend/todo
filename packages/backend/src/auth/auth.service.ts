@@ -16,7 +16,11 @@ export class AuthService {
       throw new BadRequestException('Wrong login or password');
     }
 
-    if (!this.usersService.isValidPassword(password, user.passwordHash)) {
+    const isValidPassword = await this.usersService.isValidPassword(
+      password,
+      user.passwordHash
+    );
+    if (!isValidPassword) {
       throw new BadRequestException('Wrong login or password');
     }
 
