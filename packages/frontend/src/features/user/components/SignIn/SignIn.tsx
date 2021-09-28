@@ -4,11 +4,11 @@ import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../../../app/store';
 import { userActions } from '../../slice';
-import useAppDispatch from '../../../../hooks/useAppDispatch';
+import { useAppDispatch } from '../../../../hooks/useAppDispatch';
 import styles from './SignIn.module.scss';
 import { Link } from 'react-router-dom';
 
-const SignIn: FC = () => {
+export const SignIn: FC = () => {
   const loading = useSelector((state: AppState) => state.user.signInPending);
   const error = useSelector((state: AppState) => state.user.signInError);
   const dispatch = useAppDispatch();
@@ -80,5 +80,3 @@ const SignIn: FC = () => {
     </div>
   );
 };
-
-export default SignIn;

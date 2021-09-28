@@ -1,1 +1,1 @@
-export default class SseError extends Error {}
+export class SseError extends Error {}

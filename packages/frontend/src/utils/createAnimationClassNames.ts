@@ -1,4 +1,4 @@
-export default function createAnimationClassNames(
+export function createAnimationClassNames(
   name: string,
   styles: {
     readonly [key: string]: string;

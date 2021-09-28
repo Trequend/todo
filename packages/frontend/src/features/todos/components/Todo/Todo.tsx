@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import useAppDispatch from '../../../../hooks/useAppDispatch';
-import useAppSelector from '../../../../hooks/useAppSelector';
+import { useAppDispatch } from '../../../../hooks/useAppDispatch';
+import { useAppSelector } from '../../../../hooks/useAppSelector';
 import { todosActions } from '../../slice';
 import { Editor } from './Editor';
 

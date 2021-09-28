@@ -1,8 +1,8 @@
 import { Button, Empty } from 'antd';
 import { FC, useEffect, useMemo, useState } from 'react';
-import Indicator from '../../../../components/Indicator/Indicator';
-import useAppDispatch from '../../../../hooks/useAppDispatch';
-import useAppSelector from '../../../../hooks/useAppSelector';
+import { Indicator } from '../../../../components/Indicator/Indicator';
+import { useAppDispatch } from '../../../../hooks/useAppDispatch';
+import { useAppSelector } from '../../../../hooks/useAppSelector';
 import { todosActions } from '../../slice';
 import styles from './TodosList.module.scss';
 import { Todo } from '../Todo';

@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Todo } from '../../types';
-import addSseEventsListeners from '../../utils/addSseEventsListeners';
-import addTaskHandler, { WithTask } from '../../utils/addTaskHandler';
+import { addSseEventsListeners } from '../../utils/addSseEventsListeners';
+import { addTaskHandler, WithTask } from '../../utils/addTaskHandler';
 import { arrayToObject } from '../../utils/arrayToObject';
-import createApiTask from '../../utils/createApiTask';
-import createSseConnectionTasks from '../../utils/createSseConnectionTasks';
+import { createApiTask } from '../../utils/createApiTask';
+import { createSseConnectionTasks } from '../../utils/createSseConnectionTasks';
 import * as api from './api';
 
 type State = {

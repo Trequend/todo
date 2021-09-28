@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import User from '../../types/User';
-import addSseEventsListeners from '../../utils/addSseEventsListeners';
-import addTaskHandler, { WithTask } from '../../utils/addTaskHandler';
-import createApiTask from '../../utils/createApiTask';
-import createSseConnectionTasks from '../../utils/createSseConnectionTasks';
+import { User } from '../../types/User';
+import { addSseEventsListeners } from '../../utils/addSseEventsListeners';
+import { addTaskHandler, WithTask } from '../../utils/addTaskHandler';
+import { createApiTask } from '../../utils/createApiTask';
+import { createSseConnectionTasks } from '../../utils/createSseConnectionTasks';
 import * as api from './api';
 
 type State = {

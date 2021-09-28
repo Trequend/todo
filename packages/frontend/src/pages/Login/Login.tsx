@@ -5,10 +5,10 @@ import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { STORE_KEYS } from '../../app/persistentStore';
 import { SignIn, SignUp } from '../../features/user/components';
 import { usePersistentStore } from '../../hooks/usePersistentStore';
-import createAnimationClassNames from '../../utils/createAnimationClassNames';
+import { createAnimationClassNames } from '../../utils/createAnimationClassNames';
 import styles from './Login.module.scss';
 
-const Login: FC = () => {
+export const Login: FC = () => {
   const location = useLocation();
   const authorized = usePersistentStore(STORE_KEYS.AUTHORIZED);
 
@@ -47,5 +47,3 @@ const Login: FC = () => {
     </>
   );
 };
-
-export default Login;

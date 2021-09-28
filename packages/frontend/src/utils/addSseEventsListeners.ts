@@ -10,7 +10,7 @@ type Options<State> = {
   };
 };
 
-export default function addSseEventsListeners<State>(
+export function addSseEventsListeners<State>(
   eventsPrefix: string,
   builder: ActionReducerMapBuilder<State>,
   options: Options<State>

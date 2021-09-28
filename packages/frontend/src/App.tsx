@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Route, Switch } from 'react-router';
 import { Home, Login } from './pages';
 
-const App: FC = () => {
+export const App: FC = () => {
   return (
     <Switch>
       <Route exact path="/" component={Home} />
@@ -10,5 +10,3 @@ const App: FC = () => {
     </Switch>
   );
 };
-
-export default App;

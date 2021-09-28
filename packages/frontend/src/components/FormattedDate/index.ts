@@ -1,1 +1,1 @@
-export { default } from './FormattedDate';
+export { FormattedDate } from './FormattedDate';

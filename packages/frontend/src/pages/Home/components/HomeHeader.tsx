@@ -2,17 +2,17 @@ import { PlusOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { Alert, Drawer, PageHeader, Popover } from 'antd';
 import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
 import { FC, useState } from 'react';
-import FormattedDate from '../../../components/FormattedDate';
+import { FormattedDate } from '../../../components/FormattedDate';
 import { CreateTodoForm } from '../../../features/todos/components';
 import { LogoutButton } from '../../../features/user/components';
-import useAppSelector from '../../../hooks/useAppSelector';
+import { useAppSelector } from '../../../hooks/useAppSelector';
 import styles from './HomeHeader.module.scss';
 
 type Props = {
   className?: string;
 };
 
-const HomeHeader: FC<Props> = ({ className }) => {
+export const HomeHeader: FC<Props> = ({ className }) => {
   const breakpoints = useBreakpoint();
   const user = useAppSelector((state) => state.user.data);
   const [addTodoVisible, setAddTodoVisible] = useState(false);
@@ -68,5 +68,3 @@ const HomeHeader: FC<Props> = ({ className }) => {
     </header>
   );
 };
-
-export default HomeHeader;

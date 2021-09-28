@@ -1,14 +1,14 @@
 import { Button, ButtonProps } from 'antd';
 import { FC } from 'react';
 import { STORE_KEYS } from '../../../app/persistentStore';
-import useAppDispatch from '../../../hooks/useAppDispatch';
-import useAppSelector from '../../../hooks/useAppSelector';
+import { useAppDispatch } from '../../../hooks/useAppDispatch';
+import { useAppSelector } from '../../../hooks/useAppSelector';
 import { usePersistentStore } from '../../../hooks/usePersistentStore';
 import { userActions } from '../slice';
 
 type Props = Omit<ButtonProps, 'loading'>;
 
-const LogoutButton: FC<Props> = ({
+export const LogoutButton: FC<Props> = ({
   onClick: clickCallback,
   children,
   ...props
@@ -37,5 +37,3 @@ const LogoutButton: FC<Props> = ({
     </Button>
   );
 };
-
-export default LogoutButton;

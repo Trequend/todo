@@ -1,5 +1,5 @@
 import { Todo } from '../../types';
-import fetchApi from '../../utils/fetchApi';
+import { fetchApi } from '../../utils/fetchApi';
 
 export async function fetchTodos() {
   const todos: Todo[] = await fetchApi('/todos');

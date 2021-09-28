@@ -11,7 +11,7 @@ type Props = {
   onReload?: () => void;
 };
 
-const Indicator: FC<Props> = ({
+export const Indicator: FC<Props> = ({
   className,
   delay,
   loading,
@@ -41,5 +41,3 @@ const Indicator: FC<Props> = ({
 Indicator.defaultProps = {
   delay: 500,
 } as Partial<Props>;
-
-export default Indicator;

@@ -1,9 +1,9 @@
-import ApiError from '../errors/ApiError';
-import getCookie from './getCookie';
-import resetApp from '../app/resetApp';
+import { ApiError } from '../errors/ApiError';
+import { getCookie } from './getCookie';
+import { resetApp } from '../app/resetApp';
 import { UnauthorizedError } from '../errors/UnauthorizedError';
 
-export default async function fetchApi(input: RequestInfo, init?: RequestInit) {
+export async function fetchApi(input: RequestInfo, init?: RequestInit) {
   const options = init ?? {};
   const apiPrefix = process.env.REACT_APP_API_URL ?? '';
   const response = await fetch(`${apiPrefix}${input}`, {

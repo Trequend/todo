@@ -4,11 +4,11 @@ import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../../../app/store';
 import { userActions } from '../../slice';
-import useAppDispatch from '../../../../hooks/useAppDispatch';
+import { useAppDispatch } from '../../../../hooks/useAppDispatch';
 import styles from './SignUp.module.scss';
 import { Link, useHistory } from 'react-router-dom';
 
-const SignUp: FC = () => {
+export const SignUp: FC = () => {
   const history = useHistory();
   const [formSubmitted, setFormSubmitted] = useState(false);
   const loading = useSelector((state: AppState) => state.user.signUpPending);
@@ -135,5 +135,3 @@ const SignUp: FC = () => {
     </div>
   );
 };
-
-export default SignUp;

@@ -32,7 +32,7 @@ type TaskReducer<
   >
 >;
 
-function addTaskHandler<
+export function addTaskHandler<
   TaskName extends string,
   State,
   Returned,
@@ -50,7 +50,7 @@ function addTaskHandler<
   }
 ): void;
 
-function addTaskHandler<
+export function addTaskHandler<
   TaskName extends string,
   State extends WithTask<TaskName>,
   Returned,
@@ -66,7 +66,7 @@ function addTaskHandler<
   }
 ): void;
 
-function addTaskHandler<
+export function addTaskHandler<
   TaskName extends string,
   State,
   Returned,
@@ -119,5 +119,3 @@ function addTaskHandler<
     options.onReject && options.onReject(state, action);
   });
 }
-
-export default addTaskHandler;

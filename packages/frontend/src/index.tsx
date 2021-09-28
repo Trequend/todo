@@ -1,12 +1,11 @@
-import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import { App } from './App';
 import reportWebVitals from './reportWebVitals';
-import 'antd/dist/antd.less';
-import './styles/global.scss';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import store from './app/store';
+import { store } from './app/store';
+import 'antd/dist/antd.less';
+import './styles/global.scss';
 
 ReactDOM.render(
   <BrowserRouter>

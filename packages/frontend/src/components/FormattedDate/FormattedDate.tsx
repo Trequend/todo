@@ -5,7 +5,7 @@ type Props = {
   format?: string;
 };
 
-const FormattedDate: FC<Props> = ({ format }) => {
+export const FormattedDate: FC<Props> = ({ format }) => {
   const [date, setDate] = useState(() => moment());
 
   useEffect(() => {
@@ -24,5 +24,3 @@ const FormattedDate: FC<Props> = ({ format }) => {
 FormattedDate.defaultProps = {
   format: 'dddd',
 };
-
-export default FormattedDate;

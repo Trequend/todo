@@ -1,6 +1,6 @@
 import { EventSourcePolyfill } from 'event-source-polyfill';
 import { UnauthorizedError } from '../errors/UnauthorizedError';
-import getCookie from '../utils/getCookie';
+import { getCookie } from '../utils/getCookie';
 
 const connections = new Map<object, EventSource>();
 

@@ -1,5 +1,5 @@
 import { persistentStore } from './persistentStore';
 
-export default function resetApp() {
+export function resetApp() {
   persistentStore.clear();
 }

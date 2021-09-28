@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { todosReducer } from '../features/todos/slice';
 import { userReducer } from '../features/user/slice';
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
     user: userReducer,
     todos: todosReducer,
@@ -12,5 +12,3 @@ const store = configureStore({
 export type AppDispatch = typeof store.dispatch;
 
 export type AppState = ReturnType<typeof store.getState>;
-
-export default store;

@@ -1,16 +1,16 @@
 import { FC, useEffect, useMemo } from 'react';
 import { Redirect } from 'react-router-dom';
 import { STORE_KEYS } from '../../app/persistentStore';
-import Indicator from '../../components/Indicator/Indicator';
+import { Indicator } from '../../components/Indicator/Indicator';
 import { TodosList } from '../../features/todos/components';
 import { userActions } from '../../features/user/slice';
-import useAppDispatch from '../../hooks/useAppDispatch';
-import useAppSelector from '../../hooks/useAppSelector';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useAppSelector } from '../../hooks/useAppSelector';
 import { usePersistentStore } from '../../hooks/usePersistentStore';
-import HomeHeader from './components/HomeHeader';
+import { HomeHeader } from './components/HomeHeader';
 import styles from './Home.module.scss';
 
-const Home: FC = () => {
+export const Home: FC = () => {
   const authorized = usePersistentStore(STORE_KEYS.AUTHORIZED);
   const loading = useAppSelector((state) => state.user.fetchPending);
   const error = useAppSelector((state) => state.user.fetchError);
@@ -53,5 +53,3 @@ const Home: FC = () => {
     );
   }
 };
-
-export default Home;
