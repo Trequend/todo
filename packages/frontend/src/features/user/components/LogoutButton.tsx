@@ -11,6 +11,7 @@ type Props = Omit<ButtonProps, 'loading'>;
 
 export const LogoutButton: FC<Props> = ({
   onClick: clickCallback,
+  disabled,
   children,
   ...props
 }) => {
@@ -32,7 +33,7 @@ export const LogoutButton: FC<Props> = ({
       {...props}
       onClick={onClick}
       loading={pending}
-      disabled={!authorized}
+      disabled={disabled || !authorized}
       loadingDelay={500}
     >
       {children ?? 'Logout'}
