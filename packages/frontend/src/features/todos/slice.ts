@@ -69,7 +69,8 @@ const slice = createSlice({
     addTaskHandler('create', builder, tasks.createTodo);
 
     addTaskHandler('change', builder, tasks.changeTodo, {
-      selector(state, { id }) {
+      selector(state, { params }) {
+        const { id } = params;
         return state.list[id];
       },
       onFulfill(state, { payload: todo }) {
@@ -81,11 +82,13 @@ const slice = createSlice({
     });
 
     addTaskHandler('delete', builder, tasks.deleteTodo, {
-      selector(state, id) {
+      selector(state, { params }) {
+        const { id } = params;
         return state.list[id];
       },
       onFulfill(state, { meta }) {
-        delete state.list[meta.arg];
+        const { id } = meta.arg.params;
+        delete state.list[id];
       },
     });
 

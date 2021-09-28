@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { Button, Input, Form, Row, Col, Alert, message } from 'antd';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
@@ -7,10 +7,11 @@ import { userActions } from '../../slice';
 import { useAppDispatch } from '../../../../hooks/useAppDispatch';
 import styles from './SignUp.module.scss';
 import { Link, useHistory } from 'react-router-dom';
+import { useForm } from 'antd/lib/form/Form';
 
 export const SignUp: FC = () => {
   const history = useHistory();
-  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [form] = useForm();
   const loading = useSelector((state: AppState) => state.user.signUpPending);
   const error = useSelector((state: AppState) => state.user.signUpError);
   const dispatch = useAppDispatch();
@@ -18,13 +19,19 @@ export const SignUp: FC = () => {
   const onFinish = (values: any) => {
     dispatch(
       userActions.signUp({
-        email: values.email,
-        firstName: values.firstName,
-        lastName: values.lastName,
-        password: values.password,
+        onFulfill: () => {
+          form.resetFields();
+          message.success('User registered');
+          history.push('/signin');
+        },
+        params: {
+          email: values.email,
+          firstName: values.firstName,
+          lastName: values.lastName,
+          password: values.password,
+        },
       })
     );
-    setFormSubmitted(true);
   };
 
   useEffect(() => {
@@ -33,19 +40,10 @@ export const SignUp: FC = () => {
     };
   }, [dispatch]);
 
-  useEffect(() => {
-    if (formSubmitted && !loading && !error) {
-      message.success('User registered');
-      history.push('/signin');
-    } else if (!loading) {
-      setFormSubmitted(false);
-    }
-  }, [history, formSubmitted, loading, error]);
-
   return (
     <div className={styles.root}>
       <div className={styles.form}>
-        <Form onFinish={onFinish}>
+        <Form form={form} onFinish={onFinish}>
           <div className={styles.name}>
             <h2>Sign Up</h2>
           </div>

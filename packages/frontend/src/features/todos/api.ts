@@ -6,7 +6,11 @@ export async function fetchTodos() {
   return todos;
 }
 
-export async function createTodo(text: string) {
+export type CreateTodoParams = {
+  text: string;
+};
+
+export async function createTodo({ text }: CreateTodoParams) {
   const todo: Todo = await fetchApi('/todos', {
     method: 'POST',
     headers: {
@@ -38,7 +42,11 @@ export async function changeTodo(params: ChangeTodoParams) {
   return todo;
 }
 
-export async function deleteTodo(id: string) {
+export type DeleteTodoParams = {
+  id: string;
+};
+
+export async function deleteTodo({ id }: DeleteTodoParams) {
   await fetchApi('/todos', {
     method: 'DELETE',
     headers: {

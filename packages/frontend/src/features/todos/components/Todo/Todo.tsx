@@ -19,7 +19,7 @@ export const Todo: FC<Props> = ({ id, isEditMode }) => {
       done: !todo.done,
     };
     dispatch(todosActions.changeTodoLocal(params));
-    dispatch(todosActions.changeTodo(params));
+    dispatch(todosActions.changeTodo({ params }));
   };
 
   const onTextChange = (value: string) => {
@@ -28,12 +28,16 @@ export const Todo: FC<Props> = ({ id, isEditMode }) => {
       text: value,
     };
     dispatch(todosActions.changeTodoLocal(params));
-    dispatch(todosActions.changeTodo(params));
+    dispatch(todosActions.changeTodo({ params }));
   };
 
   const onDelete = () => {
     dispatch(todosActions.deleteTodoLocal(id));
-    dispatch(todosActions.deleteTodo(id));
+    dispatch(
+      todosActions.deleteTodo({
+        params: { id },
+      })
+    );
   };
 
   return (

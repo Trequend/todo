@@ -16,8 +16,10 @@ export const SignIn: FC = () => {
   const onFinish = (values: any) => {
     dispatch(
       userActions.signIn({
-        email: values.email,
-        password: values.password,
+        params: {
+          email: values.email,
+          password: values.password,
+        },
       })
     );
   };
