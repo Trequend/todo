@@ -12,7 +12,11 @@ type State = {
   WithTask<'connect'> &
   WithTask<'signIn'> &
   WithTask<'signUp'> &
-  WithTask<'logout'>;
+  WithTask<'logout'> &
+  WithTask<'changeAvatar'> &
+  WithTask<'deleteAvatar'> &
+  WithTask<'changeUser'> &
+  WithTask<'changePassword'>;
 
 const SLICE_NAME = 'user';
 
@@ -38,6 +42,14 @@ const tasks = {
   signIn: createApiTask(SLICE_NAME, 'signIn', api.signIn),
   signUp: createApiTask(SLICE_NAME, 'signUp', api.signUp),
   logout: createApiTask(SLICE_NAME, 'logout', api.logout),
+  changeAvatar: createApiTask(SLICE_NAME, 'changeAvatar', api.changeAvatar),
+  deleteAvatar: createApiTask(SLICE_NAME, 'deleteAvatar', api.deleteAvatar),
+  changeUser: createApiTask(SLICE_NAME, 'changeUser', api.changeUser),
+  changePassword: createApiTask(
+    SLICE_NAME,
+    'changePassword',
+    api.changePassword
+  ),
 };
 
 const slice = createSlice({
@@ -68,6 +80,30 @@ const slice = createSlice({
     addTaskHandler('signUp', builder, tasks.signUp);
 
     addTaskHandler('logout', builder, tasks.logout);
+
+    addTaskHandler('changeAvatar', builder, tasks.changeAvatar, {
+      onFulfill(state, { payload: avatarId }) {
+        if (state.data) {
+          state.data.avatarId = avatarId ?? null;
+        }
+      },
+    });
+
+    addTaskHandler('deleteAvatar', builder, tasks.deleteAvatar, {
+      onFulfill(state) {
+        if (state.data) {
+          state.data.avatarId = null;
+        }
+      },
+    });
+
+    addTaskHandler('changeUser', builder, tasks.changeUser, {
+      onFulfill(state, { payload: user }) {
+        state.data = user;
+      },
+    });
+
+    addTaskHandler('changePassword', builder, tasks.changePassword);
 
     addSseEventsListeners(eventsPrefix, builder, {
       listeners: {

@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 import { Input, Form, Alert } from 'antd';
-import { Button } from '../../../../components/Button/Button';
+import { Button } from '../../../../components/Button';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../../../app/store';

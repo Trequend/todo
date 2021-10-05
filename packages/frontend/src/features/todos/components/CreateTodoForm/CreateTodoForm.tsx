@@ -1,7 +1,7 @@
 import { Form, Input } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { FC } from 'react';
-import { Button } from '../../../../components/Button/Button';
+import { Button } from '../../../../components/Button';
 import { useAppDispatch } from '../../../../hooks/useAppDispatch';
 import { useAppSelector } from '../../../../hooks/useAppSelector';
 import { todosActions } from '../../slice';

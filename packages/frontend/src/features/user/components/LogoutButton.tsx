@@ -1,5 +1,5 @@
 import { ButtonProps } from 'antd';
-import { Button } from '../../../components/Button/Button';
+import { Button } from '../../../components/Button';
 import { FC } from 'react';
 import { STORE_KEYS } from '../../../app/persistentStore';
 import { useAppDispatch } from '../../../hooks/useAppDispatch';

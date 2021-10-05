@@ -16,6 +16,9 @@ export class User {
 
   @Prop({ required: true, maxlength: 256 })
   passwordHash: string;
+
+  @Prop()
+  avatarId?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

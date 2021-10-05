@@ -6,7 +6,7 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
-import { FastifyRequest, FastifyReply } from 'fastify';
+import { FastifyReply } from 'fastify';
 
 @Injectable()
 export class CsrfInterceptor implements NestInterceptor {
@@ -14,10 +14,9 @@ export class CsrfInterceptor implements NestInterceptor {
     context: ExecutionContext,
     next: CallHandler<any>
   ): Observable<any> | Promise<Observable<any>> {
-    const request: FastifyRequest & { headers: { [Key in string]: string } } =
-      context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest();
 
-    if (request.session.xsrfToken) {
+    if (request.session.xsrfToken && request.method !== 'GET') {
       const token = request.headers['x-xsrf-token'];
       if (token !== request.session.xsrfToken) {
         throw new BadRequestException('Wrong header: X-XSRF-TOKEN');

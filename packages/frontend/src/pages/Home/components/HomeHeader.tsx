@@ -1,10 +1,11 @@
 import { PlusOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
-import { Alert, Drawer, PageHeader, Popover } from 'antd';
+import { Alert, Drawer, PageHeader, Popover, Modal, Button } from 'antd';
 import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
 import { FC, useState } from 'react';
 import { FormattedDate } from '../../../components/FormattedDate';
 import { CreateTodoForm } from '../../../features/todos/components';
-import { LogoutButton } from '../../../features/user/components';
+import { LogoutButton, UserEditor } from '../../../features/user/components';
+import { UserAvatar } from '../../../features/user/components/UserAvatar';
 import { useAppSelector } from '../../../hooks/useAppSelector';
 import styles from './HomeHeader.module.scss';
 
@@ -16,6 +17,8 @@ export const HomeHeader: FC<Props> = ({ className }) => {
   const breakpoints = useBreakpoint();
   const user = useAppSelector((state) => state.user.data);
   const [addTodoVisible, setAddTodoVisible] = useState(false);
+  const [userEditorVisible, setUserEditorVisible] = useState(false);
+  const [popoverVisible, setPopoverVisible] = useState(false);
 
   if (!user) {
     return <Alert message="Error" description="No user" type="error" />;
@@ -31,10 +34,19 @@ export const HomeHeader: FC<Props> = ({ className }) => {
       >
         <CreateTodoForm />
       </Drawer>
+      <Modal
+        title="Settings"
+        visible={userEditorVisible}
+        onCancel={() => setUserEditorVisible(false)}
+        footer={null}
+      >
+        <UserEditor />
+      </Modal>
       <PageHeader
         avatar={{
           icon: <UserOutlined />,
           alt: 'User avatar',
+          src: user.avatarId ? <UserAvatar /> : undefined,
         }}
         title={
           breakpoints.sm ? `${user.firstName} ${user.lastName}` : user.firstName
@@ -53,14 +65,31 @@ export const HomeHeader: FC<Props> = ({ className }) => {
             <Popover
               content={
                 <div className={styles.settingsButtons}>
+                  <Button
+                    type="text"
+                    htmlType="button"
+                    onClick={() => {
+                      setUserEditorVisible(true);
+                      setPopoverVisible(false);
+                    }}
+                  >
+                    Settings
+                  </Button>
                   <LogoutButton type="text" htmlType="button" />
                 </div>
               }
-              trigger="click"
+              visible={popoverVisible}
+              onVisibleChange={(value) => setPopoverVisible(value)}
               placement="bottomRight"
+              trigger="click"
               arrowPointAtCenter
             >
-              <SettingOutlined className={styles.extraIcon} />
+              <SettingOutlined
+                className={styles.extraIcon}
+                onClick={() => {
+                  setPopoverVisible(true);
+                }}
+              />
             </Popover>
           </div>,
         ]}

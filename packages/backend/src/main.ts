@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import fastifyCookie from 'fastify-cookie';
 import fastifySession from '@fastify/session';
+import fastifyMultipart from 'fastify-multipart';
 import {
   FastifyAdapter,
   NestFastifyApplication,
@@ -16,6 +17,7 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter()
   );
+  app.register(fastifyMultipart);
   app.register(fastifyCookie);
   app.register(fastifySession, {
     secret:
@@ -35,7 +37,7 @@ async function bootstrap() {
   });
   app.useGlobalPipes(
     new ValidationPipe({
-      disableErrorMessages: false,
+      disableErrorMessages: true,
       transform: true,
     })
   );

@@ -44,5 +44,61 @@ export async function signUp(params: SignUpParams) {
 
 export async function logout() {
   await fetchApi('/auth/logout', { method: 'POST' });
-  await resetApp();
+  resetApp();
+}
+
+export type ChangeAvatarParams = {
+  file: File;
+};
+
+export async function changeAvatar(
+  params: ChangeAvatarParams
+): Promise<string | null> {
+  const data = new FormData();
+
+  data.append('avatar', params.file);
+
+  const { avatarId } = await fetchApi('/user/avatar', {
+    method: 'PUT',
+    body: data,
+  });
+
+  return avatarId;
+}
+
+export async function deleteAvatar() {
+  await fetchApi('/user/avatar', {
+    method: 'DELETE',
+  });
+}
+
+export type ChangeUserParams = {
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+};
+
+export async function changeUser(params: ChangeUserParams) {
+  return (await fetchApi('/user', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(params),
+  })) as User;
+}
+
+export type ChangePasswordParams = {
+  password: string;
+  newPassword: string;
+};
+
+export async function changePassword(params: ChangeUserParams) {
+  await fetchApi('/user/password', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(params),
+  });
 }

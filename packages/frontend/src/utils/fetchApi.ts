@@ -26,7 +26,7 @@ export async function fetchApi(input: RequestInfo, init?: RequestInit) {
       if (error instanceof ApiError) {
         throw error;
       } else {
-        throw new ApiError('Unknown error');
+        throw new ApiError(response.statusText);
       }
     }
   }
