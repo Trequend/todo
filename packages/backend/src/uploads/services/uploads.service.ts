@@ -1,8 +1,8 @@
 import {
-  BadRequestException,
   Inject,
   Injectable,
   NotFoundException,
+  PayloadTooLargeException,
 } from '@nestjs/common';
 import { MultipartFile } from 'fastify-multipart';
 import {
@@ -68,7 +68,7 @@ export class UploadsService {
     await pipeline(file, uploadStream as Writable);
     if ((file as any).truncated) {
       this.deleteFile(id.toString(), userId);
-      throw new BadRequestException('File too large');
+      throw new PayloadTooLargeException('File too large');
     }
 
     return id.toString();

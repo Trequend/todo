@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   CallHandler,
   ExecutionContext,
   Injectable,
@@ -32,7 +33,16 @@ export class FilesUploadsInterceptor implements NestInterceptor {
       [context.getHandler(), context.getClass()]
     ) || { config: {} };
 
-    request.multipartFiles = request.files(options.config);
+    const files = request.files(options.config);
+    request.multipartFiles = (async function* () {
+      for await (const file of files) {
+        if (options.mimetypes && !options.mimetypes.includes(file.mimetype)) {
+          throw new BadRequestException('Wrong mimetype');
+        } else {
+          yield file;
+        }
+      }
+    })();
 
     return next.handle().pipe(
       catchError((error) => {
