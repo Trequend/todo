@@ -1,8 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { resetApp } from '../app/resetApp';
-import { SseError } from '../errors/SseError';
-import { UnauthorizedError } from '../errors/UnauthorizedError';
-import { sse, SseConnectOptions } from '../features/sse';
+import { resetApp } from 'src/app/resetApp';
+import { SseError, UnauthorizedError } from 'src/errors';
+import { sse, SseConnectOptions } from 'src/features/sse';
 
 export function createSseConnectionTasks(
   sliceName: string,

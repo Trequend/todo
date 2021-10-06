@@ -1,17 +1,15 @@
 import { FC, useEffect } from 'react';
 import { Input, Form, Alert } from 'antd';
-import { Button } from '../../../../components/Button';
+import { Button } from 'src/components';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
-import { AppState } from '../../../../app/store';
-import { userActions } from '../../slice';
-import { useAppDispatch } from '../../../../hooks/useAppDispatch';
-import styles from './SignIn.module.scss';
+import { useAppDispatch, useAppSelector } from 'src/hooks';
 import { Link } from 'react-router-dom';
+import { userActions } from '../../slice';
+import styles from './SignIn.module.scss';
 
 export const SignIn: FC = () => {
-  const loading = useSelector((state: AppState) => state.user.signInPending);
-  const error = useSelector((state: AppState) => state.user.signInError);
+  const loading = useAppSelector((state) => state.user.signInPending);
+  const error = useAppSelector((state) => state.user.signInError);
   const dispatch = useAppDispatch();
 
   const onFinish = (values: any) => {

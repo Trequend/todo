@@ -65,6 +65,7 @@
     "web-vitals": "^1.0.1"
   },
   "devDependencies": {
+    "craco-alias": "^3.0.1",
     "sass": "^1.39.0",
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^22.0.0",

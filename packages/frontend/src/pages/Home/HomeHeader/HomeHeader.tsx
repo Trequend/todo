@@ -2,11 +2,14 @@ import { PlusOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { Alert, Drawer, PageHeader, Popover, Modal, Button } from 'antd';
 import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
 import { FC, useState } from 'react';
-import { FormattedDate } from '../../../components/FormattedDate';
-import { CreateTodoForm } from '../../../features/todos/components';
-import { LogoutButton, UserEditor } from '../../../features/user/components';
-import { UserAvatar } from '../../../features/user/components/UserAvatar';
-import { useAppSelector } from '../../../hooks/useAppSelector';
+import { FormattedDate } from 'src/components';
+import { CreateTodoForm } from 'src/features/todos/components';
+import {
+  LogoutButton,
+  UserEditor,
+  UserAvatar,
+} from 'src/features/user/components';
+import { useAppSelector } from 'src/hooks/useAppSelector';
 import styles from './HomeHeader.module.scss';
 
 type Props = {

@@ -1,7 +1,7 @@
-import { persistentStore, STORE_KEYS } from '../../app/persistentStore';
-import { resetApp } from '../../app/resetApp';
-import type { User } from '../../types/User';
-import { fetchApi } from '../../utils/fetchApi';
+import { persistentStore, STORE_KEYS } from 'src/app/persistentStore';
+import { resetApp } from 'src/app/resetApp';
+import { User } from 'src/types';
+import { fetchApi } from 'src/utils';
 
 export async function fetchUser() {
   const user: User = await fetchApi('/user');

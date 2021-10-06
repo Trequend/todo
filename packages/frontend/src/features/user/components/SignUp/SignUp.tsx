@@ -1,20 +1,18 @@
 import { FC, useEffect } from 'react';
 import { Input, Form, Row, Col, Alert, message } from 'antd';
-import { Button } from '../../../../components/Button';
+import { Button } from 'src/components';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
-import { AppState } from '../../../../app/store';
-import { userActions } from '../../slice';
-import { useAppDispatch } from '../../../../hooks/useAppDispatch';
-import styles from './SignUp.module.scss';
+import { useAppDispatch, useAppSelector } from 'src/hooks';
 import { Link, useHistory } from 'react-router-dom';
 import { useForm } from 'antd/lib/form/Form';
+import { userActions } from '../../slice';
+import styles from './SignUp.module.scss';
 
 export const SignUp: FC = () => {
   const history = useHistory();
   const [form] = useForm();
-  const loading = useSelector((state: AppState) => state.user.signUpPending);
-  const error = useSelector((state: AppState) => state.user.signUpError);
+  const loading = useAppSelector((state) => state.user.signUpPending);
+  const error = useAppSelector((state) => state.user.signUpError);
   const dispatch = useAppDispatch();
 
   const onFinish = (values: any) => {

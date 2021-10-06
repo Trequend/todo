@@ -1,11 +1,10 @@
 import { Button, Empty } from 'antd';
 import { FC, useEffect, useMemo, useState } from 'react';
-import { Indicator } from '../../../../components/Indicator/Indicator';
-import { useAppDispatch } from '../../../../hooks/useAppDispatch';
-import { useAppSelector } from '../../../../hooks/useAppSelector';
+import { Indicator } from 'src/components';
+import { useAppDispatch, useAppSelector } from 'src/hooks';
 import { todosActions } from '../../slice';
-import styles from './TodosList.module.scss';
 import { Todo } from '../Todo';
+import styles from './TodosList.module.scss';
 
 export const TodosList: FC = () => {
   const todos = useAppSelector((state) => state.todos.list);

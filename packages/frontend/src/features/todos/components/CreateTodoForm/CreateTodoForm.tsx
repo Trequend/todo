@@ -1,9 +1,8 @@
 import { Form, Input } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { FC } from 'react';
-import { Button } from '../../../../components/Button';
-import { useAppDispatch } from '../../../../hooks/useAppDispatch';
-import { useAppSelector } from '../../../../hooks/useAppSelector';
+import { Button } from 'src/components';
+import { useAppDispatch, useAppSelector } from 'src/hooks';
 import { todosActions } from '../../slice';
 
 export const CreateTodoForm: FC = () => {

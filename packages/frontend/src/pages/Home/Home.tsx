@@ -1,13 +1,11 @@
 import { FC, useEffect, useMemo } from 'react';
 import { Redirect } from 'react-router-dom';
-import { STORE_KEYS } from '../../app/persistentStore';
-import { Indicator } from '../../components/Indicator/Indicator';
-import { TodosList } from '../../features/todos/components';
-import { userActions } from '../../features/user/slice';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { useAppSelector } from '../../hooks/useAppSelector';
-import { usePersistentStore } from '../../hooks/usePersistentStore';
-import { HomeHeader } from './components/HomeHeader';
+import { STORE_KEYS } from 'src/app/persistentStore';
+import { Indicator } from 'src/components';
+import { TodosList } from 'src/features/todos/components';
+import { userActions } from 'src/features/user/slice';
+import { useAppDispatch, useAppSelector, usePersistentStore } from 'src/hooks';
+import { HomeHeader } from './HomeHeader';
 import styles from './Home.module.scss';
 
 export const Home: FC = () => {

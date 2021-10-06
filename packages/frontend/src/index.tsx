@@ -1,16 +1,19 @@
 import ReactDOM from 'react-dom';
-import { App } from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
 import 'antd/dist/antd.less';
 import './styles/global.scss';
+import { Home, Login } from './pages';
 
 ReactDOM.render(
   <BrowserRouter>
     <Provider store={store}>
-      <App />
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exact path={['/signin', '/signup']} component={Login} />
+      </Switch>
     </Provider>
   </BrowserRouter>,
   document.getElementById('root')

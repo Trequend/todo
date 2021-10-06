@@ -1,7 +1,6 @@
-import { ApiError } from '../errors/ApiError';
+import { ApiError, UnauthorizedError } from 'src/errors';
 import { getCookie } from './getCookie';
-import { resetApp } from '../app/resetApp';
-import { UnauthorizedError } from '../errors/UnauthorizedError';
+import { resetApp } from 'src/app/resetApp';
 
 export async function fetchApi(input: RequestInfo, init?: RequestInit) {
   const options = init ?? {};

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ChangeListener, persistentStore } from '../app/persistentStore';
+import { ChangeListener, persistentStore } from 'src/app/persistentStore';
 
 export function usePersistentStore(name: string) {
   const [value, setValue] = useState<string | undefined>(() => {

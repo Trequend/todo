@@ -1,5 +1,5 @@
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
-import { ApiError } from '../errors/ApiError';
+import { ApiError } from 'src/errors';
 
 export type TaskArgs<Params, Result> = {
   onFulfill?: (result: Result) => void;

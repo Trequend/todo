@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { AppState } from '../app/store';
+import { AppState } from 'src/app/store';
 
 export function useAppSelector<TSelected>(
   selector: (state: AppState) => TSelected,

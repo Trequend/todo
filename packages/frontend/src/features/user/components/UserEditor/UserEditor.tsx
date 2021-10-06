@@ -1,14 +1,12 @@
 import { UserOutlined } from '@ant-design/icons';
 import { Alert, Avatar, Row, Col, Form, Input, message } from 'antd';
 import { FC } from 'react';
-import { AvatarSelector } from './components/AvatarSelector';
-import { ValueEditor } from './components/ValueEditor';
-import { useAppDispatch } from '../../../../hooks/useAppDispatch';
-import { useAppSelector } from '../../../../hooks/useAppSelector';
+import { useAppDispatch, useAppSelector } from 'src/hooks';
+import { getFileUrl } from 'src/utils';
+import { ApiError } from 'src/errors';
+import { AvatarSelector, ValueEditor } from './components';
 import { userActions } from '../../slice';
-import { getFileUrl } from '../../../../utils/getFileUrl';
 import { UserAvatar } from '../UserAvatar';
-import { ApiError } from '../../../../errors/ApiError';
 import styles from './UserEditor.module.scss';
 
 export const UserEditor: FC = () => {

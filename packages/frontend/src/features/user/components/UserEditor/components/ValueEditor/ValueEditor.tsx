@@ -1,7 +1,7 @@
 import { Alert, Form } from 'antd';
-import { Button } from '../../../../../../components/Button';
+import { Button } from 'src/components';
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { ApiError } from '../../../../../../errors/ApiError';
+import { ApiError } from 'src/errors';
 import styles from './ValueEditor.module.scss';
 
 type Props = {

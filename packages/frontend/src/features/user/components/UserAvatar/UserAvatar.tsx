@@ -1,8 +1,8 @@
 import { EyeOutlined } from '@ant-design/icons';
 import { Image } from 'antd';
 import { FC } from 'react';
-import { useAppSelector } from '../../../../hooks/useAppSelector';
-import { getFileUrl } from '../../../../utils/getFileUrl';
+import { useAppSelector } from 'src/hooks';
+import { getFileUrl } from 'src/utils';
 import styles from './UserAvatar.module.scss';
 
 export const UserAvatar: FC = () => {

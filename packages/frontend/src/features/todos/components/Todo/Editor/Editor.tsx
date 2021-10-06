@@ -6,13 +6,13 @@ import {
   useState,
 } from 'react';
 import { Button, Checkbox, Input } from 'antd';
-import styles from './Editor.module.scss';
 import {
   CheckOutlined,
   CloseOutlined,
   DeleteOutlined,
   EditOutlined,
 } from '@ant-design/icons';
+import styles from './Editor.module.scss';
 
 type Props = {
   text: string;

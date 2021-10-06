@@ -1,11 +1,9 @@
 import { ButtonProps } from 'antd';
-import { Button } from '../../../components/Button';
+import { Button } from 'src/components';
 import { FC } from 'react';
-import { STORE_KEYS } from '../../../app/persistentStore';
-import { useAppDispatch } from '../../../hooks/useAppDispatch';
-import { useAppSelector } from '../../../hooks/useAppSelector';
-import { usePersistentStore } from '../../../hooks/usePersistentStore';
-import { userActions } from '../slice';
+import { STORE_KEYS } from 'src/app/persistentStore';
+import { useAppDispatch, useAppSelector, usePersistentStore } from 'src/hooks';
+import { userActions } from '../../slice';
 
 type Props = Omit<ButtonProps, 'loading'>;
 

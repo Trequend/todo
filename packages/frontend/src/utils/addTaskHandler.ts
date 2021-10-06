@@ -5,17 +5,7 @@ import {
   Draft,
   PayloadAction,
 } from '@reduxjs/toolkit';
-
-type WithTaskPending<Name extends string> = {
-  [field in `${Name}Pending`]?: boolean;
-};
-
-type WithTaskError<Name extends string> = {
-  [field in `${Name}Error`]?: string;
-};
-
-export type WithTask<Name extends string> = WithTaskPending<Name> &
-  WithTaskError<Name>;
+import { WithTask } from 'src/types';
 
 type TaskReducer<
   State,

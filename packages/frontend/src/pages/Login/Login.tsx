@@ -2,10 +2,10 @@ import { CheckOutlined } from '@ant-design/icons';
 import { FC } from 'react';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
-import { STORE_KEYS } from '../../app/persistentStore';
-import { SignIn, SignUp } from '../../features/user/components';
-import { usePersistentStore } from '../../hooks/usePersistentStore';
-import { createAnimationClassNames } from '../../utils/createAnimationClassNames';
+import { STORE_KEYS } from 'src/app/persistentStore';
+import { SignIn, SignUp } from 'src/features/user/components';
+import { usePersistentStore } from 'src/hooks';
+import { createAnimationClassNames } from 'src/utils';
 import styles from './Login.module.scss';
 
 export const Login: FC = () => {
