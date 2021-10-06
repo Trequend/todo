@@ -6,7 +6,7 @@ import {
 } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
 import { MODEL } from './constants';
-import { WatchModelService } from './watch-model.service';
+import { WatchModelService } from './services/watch-model.service';
 
 @Module({
   providers: [WatchModelService],

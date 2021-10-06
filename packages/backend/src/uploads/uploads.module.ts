@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UploadsController } from './uploads.controller';
+import { UploadsController } from './controllers/uploads.controller';
 import { UploadsService } from './services/uploads.service';
 import { FileFilterService } from './services/file-filter.service';
 import { getConnectionToken } from '@nestjs/mongoose';

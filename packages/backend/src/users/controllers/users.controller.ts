@@ -10,18 +10,18 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Auth } from 'src/auth/decorators/auth.decorator';
-import { WatchModelService } from 'src/watch-model/watch-model.service';
-import { UserId } from '../auth/decorators/user-id.decorator';
-import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './schemas/user.schema';
-import { FilteredUser } from './types/filtered-user';
-import { UsersService } from './services/users.service';
+import { WatchModelService } from 'src/watch-model/services/watch-model.service';
+import { UserId } from 'src/auth/decorators/user-id.decorator';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { User } from '../schemas/user.schema';
+import { FilteredUser } from '../types/filtered-user';
+import { UsersService } from '../services/users.service';
 import { Types } from 'mongoose';
-import { ChangePasswordDto } from './dto/change-password.dto';
-import { ChangeUserDto } from './dto/change-user.dto';
+import { ChangePasswordDto } from '../dto/change-password.dto';
+import { ChangeUserDto } from '../dto/change-user.dto';
 import { File } from 'src/uploads/decorators/file.decorator';
 import { MultipartFile } from 'fastify-multipart';
-import { UserFilterService } from './services/user-filter.service';
+import { UserFilterService } from '../services/user-filter.service';
 import { UseFilesUploads } from 'src/uploads/decorators/use-files-uploads.decorator';
 import { DisableAuth } from 'src/auth/decorators/disable-auth.decorator';
 

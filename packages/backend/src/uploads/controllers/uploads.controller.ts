@@ -7,9 +7,9 @@ import {
 } from '@nestjs/common';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { UserId } from 'src/auth/decorators/user-id.decorator';
-import { FileFilterService } from './services/file-filter.service';
-import { UploadsService } from './services/uploads.service';
-import { FilteredFile } from './types/filtered-file.type';
+import { FileFilterService } from '../services/file-filter.service';
+import { UploadsService } from '../services/uploads.service';
+import { FilteredFile } from '../types/filtered-file.type';
 
 @Auth()
 @Controller('uploads')

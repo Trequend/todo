@@ -11,13 +11,13 @@ import {
 import { Observable } from 'rxjs';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { UserId } from 'src/auth/decorators/user-id.decorator';
-import { WatchModelService } from 'src/watch-model/watch-model.service';
-import { ChangeTodoDto } from './dto/change-todo.dto';
-import { CreateTodoDto } from './dto/create-todo.dto';
-import { DeleteTodoDto } from './dto/delete-todo.dto';
-import { Todo } from './schemas/todo.schema';
-import { TodosService } from './todos.service';
-import { FilteredTodo } from './types/filtered-todo';
+import { WatchModelService } from 'src/watch-model/services/watch-model.service';
+import { ChangeTodoDto } from '../dto/change-todo.dto';
+import { CreateTodoDto } from '../dto/create-todo.dto';
+import { DeleteTodoDto } from '../dto/delete-todo.dto';
+import { Todo } from '../schemas/todo.schema';
+import { TodosService } from '../services/todos.service';
+import { FilteredTodo } from '../types/filtered-todo';
 
 @Auth()
 @Controller('todos')

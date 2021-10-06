@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { AppModule } from './app/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import fastifyCookie from 'fastify-cookie';
 import fastifySession from '@fastify/session';
@@ -17,8 +17,11 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter()
   );
+
   app.register(fastifyMultipart);
+
   app.register(fastifyCookie);
+
   app.register(fastifySession, {
     secret:
       'DEV-SECRET:fdaguhiclkjasfbwqidinasjbcnizxncgauycgqucwancahsgyabgudnwudzhsgcfsafkaklsuysagbuycngwc',
@@ -35,12 +38,14 @@ async function bootstrap() {
       mongoUrl: 'mongodb://localhost:27017/nest',
     }),
   });
+
   app.useGlobalPipes(
     new ValidationPipe({
       disableErrorMessages: true,
       transform: true,
     })
   );
+
   await app.listen(8000);
 }
 

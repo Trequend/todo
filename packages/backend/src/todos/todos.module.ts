@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { WatchModelModule } from 'src/watch-model/watch-model.module';
 import { Todo, TodoSchema } from './schemas/todo.schema';
-import { TodosController } from './todos.controller';
-import { TodosService } from './todos.service';
+import { TodosController } from './controllers/todos.controller';
+import { TodosService } from './services/todos.service';
 
 @Module({
   imports: [

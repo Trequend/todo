@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/services/users.service';
-import { LoginDto } from './dto/login.dto';
+import { LoginDto } from '../dto/login.dto';
 import * as crypto from 'crypto';
 
 @Injectable()

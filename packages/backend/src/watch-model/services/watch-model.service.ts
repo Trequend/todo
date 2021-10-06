@@ -1,7 +1,7 @@
 import { Inject, Injectable, MessageEvent } from '@nestjs/common';
 import { Document, Model } from 'mongoose';
 import { interval, map, merge, Observable } from 'rxjs';
-import { MODEL } from './constants';
+import { MODEL } from '../constants';
 
 export type StreamOptions<TDocument> = {
   transform?: (model: TDocument) => any;
