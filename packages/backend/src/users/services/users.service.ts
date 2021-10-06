@@ -5,13 +5,13 @@ import {
 } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { User } from '../schemas/user.schema';
-import { compare, hash } from 'bcrypt';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { ChangePasswordDto } from '../dto/change-password.dto';
 import { ChangeUserDto } from '../dto/change-user.dto';
 import { MultipartFile } from 'fastify-multipart';
 import { UploadsService } from 'src/uploads/services/uploads.service';
+import bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -131,10 +131,10 @@ export class UsersService {
     password: string,
     passwordHash: string
   ): Promise<boolean> {
-    return await compare(password, passwordHash);
+    return await bcrypt.compare(password, passwordHash);
   }
 
   async hash(password: string): Promise<string> {
-    return await hash(password, 10);
+    return await bcrypt.hash(password, 10);
   }
 }

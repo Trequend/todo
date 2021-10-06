@@ -4,13 +4,11 @@ import { ValidationPipe } from '@nestjs/common';
 import fastifyCookie from 'fastify-cookie';
 import fastifySession from '@fastify/session';
 import fastifyMultipart from 'fastify-multipart';
+import MongoStore from 'connect-mongo';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-
-/* eslint-disable-next-line @typescript-eslint/no-var-requires */
-const MongoStore = require('connect-mongo');
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
