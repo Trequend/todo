@@ -6,6 +6,7 @@ import { TodosList } from 'src/features/todos/components';
 import { userActions } from 'src/features/user/slice';
 import { useAppDispatch, useAppSelector, usePersistentStore } from 'src/hooks';
 import { HomeHeader } from './HomeHeader';
+import { fetchApi } from 'src/utils';
 import styles from './Home.module.scss';
 
 export const Home: FC = () => {
@@ -33,6 +34,21 @@ export const Home: FC = () => {
     connect();
     return disconnect;
   }, [connect, disconnect]);
+
+  useEffect(() => {
+    if (!authorized) {
+      return;
+    }
+
+    const TEN_MINUTES = 10 * 60 * 1000;
+    const interval = setInterval(() => {
+      fetchApi('/user/live');
+    }, TEN_MINUTES);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [authorized]);
 
   if (!authorized) {
     return <Redirect to="/signin" />;

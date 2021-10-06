@@ -40,6 +40,11 @@ export class UsersController {
     return this.userFilterService.filterUser(user);
   }
 
+  @Get('live')
+  async updateSession() {
+    return { ok: true };
+  }
+
   @Post()
   @DisableAuth()
   async createUser(
