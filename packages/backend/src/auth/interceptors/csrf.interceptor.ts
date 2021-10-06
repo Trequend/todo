@@ -7,9 +7,13 @@ import {
 } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
 import { FastifyReply } from 'fastify';
+import { ConfigService } from '@nestjs/config';
+import { Config } from 'src/config/configuration';
 
 @Injectable()
 export class CsrfInterceptor implements NestInterceptor {
+  constructor(private readonly configService: ConfigService<Config>) {}
+
   intercept(
     context: ExecutionContext,
     next: CallHandler<any>
@@ -26,19 +30,13 @@ export class CsrfInterceptor implements NestInterceptor {
     return next.handle().pipe(
       tap(() => {
         const response: FastifyReply = context.switchToHttp().getResponse();
-        if (!request.session) {
-          return;
-        }
-
-        if (request.session.xsrfToken) {
+        if (request.session && request.session.xsrfToken) {
           response.setCookie('XSRF-TOKEN', request.session.xsrfToken, {
             sameSite: 'strict',
             path: '/',
+            secure: this.configService.get('isHttpsConnection'),
             expires: new Date(
-              Date.now() +
-                (process.env.SESSION_MAX_AGE
-                  ? Number.parseInt(process.env.SESSION_MAX_AGE)
-                  : 24 * 60 * 60 * 1000) // ONE DAY
+              Date.now() + this.configService.get('sessionMaxAge')
             ),
           });
         }

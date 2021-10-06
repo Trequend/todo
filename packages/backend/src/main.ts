@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app/app.module';
+import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import fastifyCookie from 'fastify-cookie';
 import fastifySession from '@fastify/session';
@@ -9,6 +9,8 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { ConfigService } from '@nestjs/config';
+import { Config } from './config/configuration';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -16,24 +18,23 @@ async function bootstrap() {
     new FastifyAdapter()
   );
 
+  const configService = app.get(ConfigService) as ConfigService<Config>;
+
   app.register(fastifyMultipart);
 
   app.register(fastifyCookie);
 
   app.register(fastifySession, {
-    secret:
-      'DEV-SECRET:fdaguhiclkjasfbwqidinasjbcnizxncgauycgqucwancahsgyabgudnwudzhsgcfsafkaklsuysagbuycngwc',
+    secret: configService.get('sessionSecret'),
     cookieName: 'SESSION-ID',
     cookie: {
       sameSite: 'strict',
-      maxAge: process.env.SESSION_MAX_AGE
-        ? Number.parseInt(process.env.SESSION_MAX_AGE)
-        : 24 * 60 * 60 * 1000, // ONE DAY
-      secure: false,
+      maxAge: configService.get('sessionMaxAge'),
+      secure: configService.get('isHttpsConnection'),
     },
     saveUninitialized: false,
     store: MongoStore.create({
-      mongoUrl: 'mongodb://localhost:27017/nest',
+      mongoUrl: configService.get('mongoUrl'),
     }),
   });
 
@@ -44,7 +45,7 @@ async function bootstrap() {
     })
   );
 
-  await app.listen(8000);
+  await app.listen(configService.get('port'));
 }
 
 bootstrap();

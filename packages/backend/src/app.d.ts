@@ -10,10 +10,3 @@ declare module 'fastify' {
     multipartFiles?: AsyncIterableIterator<MultipartFile>;
   }
 }
-
-declare namespace NodeJS {
-  interface ProcessEnv {
-    NODE_ENV?: 'production' | 'development';
-    SESSION_MAX_AGE?: string;
-  }
-}
