@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { UploadsController } from './controllers/uploads.controller';
 import { UploadsService } from './services/uploads.service';
 import { FileFilterService } from './services/file-filter.service';
@@ -8,6 +8,7 @@ import { GridFSBucket } from 'mongodb';
 import { BUCKET } from './constants';
 import { FilesUploadsInterceptor } from './interceptors/files-uploads.interceptor';
 
+@Global()
 @Module({
   providers: [
     UploadsService,

@@ -4,7 +4,6 @@ import { User, UserSchema } from './schemas/user.schema';
 import { UsersController } from './controllers/users.controller';
 import { UsersService } from './services/users.service';
 import { UserFilterService } from './services/user-filter.service';
-import { UploadsModule } from 'src/uploads/uploads.module';
 
 @Module({
   imports: [
@@ -12,7 +11,6 @@ import { UploadsModule } from 'src/uploads/uploads.module';
       name: User.name,
       schema: UserSchema,
     }),
-    UploadsModule,
   ],
   controllers: [UsersController],
   providers: [UsersService, UserFilterService],
