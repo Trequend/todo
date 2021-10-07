@@ -24,13 +24,13 @@ export const Todo: FC<Props> = ({ id, isEditMode }) => {
     dispatch(
       todosActions.changeTodo({
         params: actionParams,
-        canAbort: (actionParams) => actionParams.id === id,
+        canAbort: (otherActionParams) => id === otherActionParams.id,
         onReject: () => {
           message.error('Failed change todo');
           dispatch(
             todosActions.changeTodoLocal({
-              id,
               ...todo,
+              id,
             })
           );
         },
