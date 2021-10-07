@@ -14,6 +14,7 @@ type State = {
     string,
     Omit<Todo, 'id'> & WithTask<'change'> & WithTask<'delete'>
   >;
+  hiddenTodos: Record<string, boolean>;
 } & WithTask<'fetch'> &
   WithTask<'create'>;
 
@@ -21,6 +22,7 @@ const SLICE_NAME = 'todos';
 
 export const todosInitialState: State = {
   list: {},
+  hiddenTodos: {},
 };
 
 const { eventsPrefix, connect, disconnect } = createSseConnectionTasks(
@@ -57,8 +59,11 @@ const slice = createSlice({
         ...rest,
       };
     },
-    deleteTodoLocal(state, { payload: id }: { payload: string }) {
-      delete state.list[id];
+    hideTodoLocal(state, { payload: id }: { payload: string }) {
+      state.hiddenTodos[id] = true;
+    },
+    showTodoLocal(state, { payload: id }: { payload: string }) {
+      delete state.hiddenTodos[id];
     },
   },
   extraReducers: (builder) => {

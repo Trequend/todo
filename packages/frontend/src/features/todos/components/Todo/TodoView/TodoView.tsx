@@ -12,7 +12,7 @@ import {
   DeleteOutlined,
   EditOutlined,
 } from '@ant-design/icons';
-import styles from './Editor.module.scss';
+import styles from './TodoView.module.scss';
 
 type Props = {
   text: string;
@@ -24,7 +24,7 @@ type Props = {
   onDelete?: () => void;
 };
 
-export const Editor: FC<Props> = ({
+export const TodoView: FC<Props> = ({
   text,
   done,
   className,
