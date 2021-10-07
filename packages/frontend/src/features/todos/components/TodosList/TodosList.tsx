@@ -7,9 +7,7 @@ import { Todo } from '../Todo';
 import styles from './TodosList.module.scss';
 
 export const TodosList: FC = () => {
-  const todos = useAppSelector((state) => state.todos.list);
-  const loading = useAppSelector((state) => state.todos.fetchPending);
-  const error = useAppSelector((state) => state.todos.fetchError);
+  const todos = useAppSelector((state) => state.todos);
   const dispatch = useAppDispatch();
   const [isEditMode, setIsEditMode] = useState(false);
 
@@ -35,7 +33,9 @@ export const TodosList: FC = () => {
     setIsEditMode((value) => !value);
   };
 
-  const entries = Object.entries(todos);
+  const error = todos.connectError || todos.fetchError;
+  const loading = todos.connectPending || todos.fetchPending;
+  const entries = Object.entries(todos.list);
   return (
     <>
       {loading || error ? (
@@ -55,7 +55,7 @@ export const TodosList: FC = () => {
               {isEditMode ? 'Stop editing' : 'Edit'}
             </Button>
           </div>
-          {Object.keys(todos).map((id) => {
+          {entries.map(([id]) => {
             return <Todo key={id} id={id} isEditMode={isEditMode} />;
           })}
         </div>

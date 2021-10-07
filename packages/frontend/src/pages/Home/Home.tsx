@@ -61,6 +61,14 @@ export const Home: FC = () => {
         onReload={connect}
       />
     );
+  } else if (user.connectError) {
+    return (
+      <Indicator
+        loading={user.connectPending}
+        error={user.connectError}
+        onReload={connect}
+      />
+    );
   } else {
     return (
       <div className={styles.root}>

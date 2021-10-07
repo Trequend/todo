@@ -16,6 +16,7 @@ type State = {
   >;
   hiddenTodos: Record<string, boolean>;
 } & WithTask<'fetch'> &
+  WithTask<'connect'> &
   WithTask<'create'>;
 
 const SLICE_NAME = 'todos';
@@ -73,6 +74,8 @@ const slice = createSlice({
       },
     });
 
+    addTaskHandler('connect', builder, tasks.connect);
+
     addTaskHandler('create', builder, tasks.createTodo);
 
     addTaskHandler('change', builder, tasks.changeTodo, {
@@ -111,6 +114,12 @@ const slice = createSlice({
           if (data && data.id) {
             delete state.list[data.id];
           }
+        },
+        open: (state) => {
+          state.connectError = undefined;
+        },
+        error: (state) => {
+          state.connectError = 'Connection lost';
         },
       },
     });
