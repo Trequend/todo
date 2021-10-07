@@ -1,16 +1,6 @@
-import {
-  IsBoolean,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  MaxLength,
-} from 'class-validator';
+import { IsBoolean, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class ChangeTodoDto {
-  @IsString()
-  @IsNotEmpty()
-  id: string;
-
   @IsString()
   @MaxLength(512)
   @IsOptional()

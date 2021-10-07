@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateTodoDto } from '../dto/create-todo.dto';
-import { DeleteTodoDto } from '../dto/delete-todo.dto';
 import { Todo, TodoDocument } from '../schemas/todo.schema';
 import { FilteredTodo } from '../types/filtered-todo';
 import { ChangeTodoDto } from '../dto/change-todo.dto';
@@ -31,8 +30,8 @@ export class TodosService {
     return todo.save();
   }
 
-  async deleteTodo(userId: string, { id: todoId }: DeleteTodoDto) {
-    const todo = await this.todoModel.findById(todoId).exec();
+  async deleteTodo(userId: string, id: string) {
+    const todo = await this.todoModel.findById(id).exec();
     if (!todo || todo.userId !== userId) {
       throw new NotFoundException();
     }
@@ -40,7 +39,7 @@ export class TodosService {
     await todo.updateOne({ deleted: new Date() }).exec();
   }
 
-  async changeTodo(userId: string, { id, text, done }: ChangeTodoDto) {
+  async changeTodo(userId: string, id: string, { text, done }: ChangeTodoDto) {
     const todo = await this.todoModel.findById(id).exec();
     if (!todo || todo.userId !== userId) {
       throw new NotFoundException();

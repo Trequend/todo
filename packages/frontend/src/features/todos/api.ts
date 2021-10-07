@@ -34,12 +34,13 @@ export type ChangeTodoParams = {
 
 export const changeTodo = createApiFunction(
   async (fetchApi, params: ChangeTodoParams) => {
-    const todo: Todo = await fetchApi('/todos', {
+    const { id, ...rest } = params;
+    const todo: Todo = await fetchApi(`/todos/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(params),
+      body: JSON.stringify(rest),
     });
 
     return todo;
@@ -52,14 +53,8 @@ export type DeleteTodoParams = {
 
 export const deleteTodo = createApiFunction(
   async (fetchApi, { id }: DeleteTodoParams) => {
-    await fetchApi('/todos', {
+    await fetchApi(`/todos/${id}`, {
       method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id,
-      }),
     });
   }
 );

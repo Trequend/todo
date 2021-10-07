@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Sse,
+  Param,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Auth } from 'src/auth/decorators/auth.decorator';
@@ -14,7 +15,6 @@ import { UserId } from 'src/auth/decorators/user-id.decorator';
 import { WatchModelService } from 'src/watch-model/services/watch-model.service';
 import { ChangeTodoDto } from '../dto/change-todo.dto';
 import { CreateTodoDto } from '../dto/create-todo.dto';
-import { DeleteTodoDto } from '../dto/delete-todo.dto';
 import { Todo } from '../schemas/todo.schema';
 import { TodosService } from '../services/todos.service';
 import { FilteredTodo } from '../types/filtered-todo';
@@ -42,21 +42,19 @@ export class TodosController {
     return this.todosService.filterTodo(todo);
   }
 
-  @Put()
+  @Put(':id')
   async changeTodo(
     @UserId() userId: string,
+    @Param('id') id: string,
     @Body() changeTodoDto: ChangeTodoDto
   ) {
-    const todo = await this.todosService.changeTodo(userId, changeTodoDto);
+    const todo = await this.todosService.changeTodo(userId, id, changeTodoDto);
     return this.todosService.filterTodo(todo);
   }
 
-  @Delete()
-  async deleteTodo(
-    @UserId() userId: string,
-    @Body() deleteTodoDto: DeleteTodoDto
-  ) {
-    await this.todosService.deleteTodo(userId, deleteTodoDto);
+  @Delete(':id')
+  async deleteTodo(@UserId() userId: string, @Param('id') id: string) {
+    await this.todosService.deleteTodo(userId, id);
   }
 
   @Sse('sse')
