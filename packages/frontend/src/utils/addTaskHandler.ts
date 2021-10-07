@@ -37,6 +37,7 @@ export function addTaskHandler<
     onPending?: TaskReducer<State, ThunkArg, Returned, 'pending'>;
     onFulfill?: TaskReducer<State, ThunkArg, Returned, 'fulfilled'>;
     onReject?: TaskReducer<State, ThunkArg, unknown, 'rejected'>;
+    onAbort?: TaskReducer<State, ThunkArg, unknown, 'rejected'>;
   }
 ): void;
 
@@ -53,6 +54,7 @@ export function addTaskHandler<
     onPending?: TaskReducer<State, ThunkArg, Returned, 'pending'>;
     onFulfill?: TaskReducer<State, ThunkArg, Returned, 'fulfilled'>;
     onReject?: TaskReducer<State, ThunkArg, unknown, 'rejected'>;
+    onAbort?: TaskReducer<State, ThunkArg, unknown, 'rejected'>;
   }
 ): void;
 
@@ -71,6 +73,7 @@ export function addTaskHandler<
     onPending?: TaskReducer<State, ThunkArg, Returned, 'pending'>;
     onFulfill?: TaskReducer<State, ThunkArg, Returned, 'fulfilled'>;
     onReject?: TaskReducer<State, ThunkArg, unknown, 'rejected'>;
+    onAbort?: TaskReducer<State, ThunkArg, unknown, 'rejected'>;
   } = {}
 ) {
   const pendingField = `${name}Pending`;
@@ -105,7 +108,11 @@ export function addTaskHandler<
     }
 
     target[pendingField] = false;
-    target[errorField] = action.error.message;
-    options.onReject && options.onReject(state, action);
+    if (action.error.name === 'AbortError') {
+      options.onAbort && options.onAbort(state, action);
+    } else {
+      target[errorField] = action.error.message;
+      options.onReject && options.onReject(state, action);
+    }
   });
 }

@@ -1,28 +1,30 @@
 import { Todo } from 'src/types';
-import { fetchApi } from 'src/utils';
+import { createApiFunction } from 'src/utils';
 
-export async function fetchTodos() {
+export const fetchTodos = createApiFunction(async (fetchApi) => {
   const todos: Todo[] = await fetchApi('/todos');
   return todos;
-}
+});
 
 export type CreateTodoParams = {
   text: string;
 };
 
-export async function createTodo({ text }: CreateTodoParams) {
-  const todo: Todo = await fetchApi('/todos', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      text,
-    }),
-  });
+export const createTodo = createApiFunction(
+  async (fetchApi, { text }: CreateTodoParams) => {
+    const todo: Todo = await fetchApi('/todos', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        text,
+      }),
+    });
 
-  return todo;
-}
+    return todo;
+  }
+);
 
 export type ChangeTodoParams = {
   id: string;
@@ -30,30 +32,34 @@ export type ChangeTodoParams = {
   done?: boolean;
 };
 
-export async function changeTodo(params: ChangeTodoParams) {
-  const todo: Todo = await fetchApi('/todos', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(params),
-  });
+export const changeTodo = createApiFunction(
+  async (fetchApi, params: ChangeTodoParams) => {
+    const todo: Todo = await fetchApi('/todos', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params),
+    });
 
-  return todo;
-}
+    return todo;
+  }
+);
 
 export type DeleteTodoParams = {
   id: string;
 };
 
-export async function deleteTodo({ id }: DeleteTodoParams) {
-  await fetchApi('/todos', {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      id,
-    }),
-  });
-}
+export const deleteTodo = createApiFunction(
+  async (fetchApi, { id }: DeleteTodoParams) => {
+    await fetchApi('/todos', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id,
+      }),
+    });
+  }
+);

@@ -24,6 +24,7 @@ export const Todo: FC<Props> = ({ id, isEditMode }) => {
     dispatch(
       todosActions.changeTodo({
         params: actionParams,
+        canAbort: (actionParams) => actionParams.id === id,
         onReject: () => {
           message.error('Failed change todo');
           dispatch(
@@ -50,6 +51,10 @@ export const Todo: FC<Props> = ({ id, isEditMode }) => {
   };
 
   const onDelete = () => {
+    if (todo.deletePending) {
+      return;
+    }
+
     dispatch(todosActions.hideTodoLocal(id));
     dispatch(
       todosActions.deleteTodo({

@@ -7,3 +7,4 @@ export { createSseConnectionTasks } from './createSseConnectionTasks';
 export { fetchApi } from './fetchApi';
 export { getCookie } from './getCookie';
 export { getFileUrl } from './getFileUrl';
+export { createApiFunction } from './createApiFunction';
