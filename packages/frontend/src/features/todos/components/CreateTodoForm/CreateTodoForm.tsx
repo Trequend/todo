@@ -1,12 +1,14 @@
-import { Form, Input } from 'antd';
+import { Alert, Form, Input } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { FC } from 'react';
 import { Button } from 'src/components';
 import { useAppDispatch, useAppSelector } from 'src/hooks';
 import { todosActions } from '../../slice';
+import styles from './CreateTodoForm.module.scss';
 
 export const CreateTodoForm: FC = () => {
   const [form] = useForm();
+  const error = useAppSelector((state) => state.todos.createError);
   const pending = useAppSelector((state) => state.todos.createPending);
   const dispatch = useAppDispatch();
 
@@ -26,6 +28,9 @@ export const CreateTodoForm: FC = () => {
 
   return (
     <Form form={form} onFinish={onFinish}>
+      {error ? (
+        <Alert className={styles.error} message={error} type="error" />
+      ) : null}
       <Form.Item
         name="text"
         rules={[{ required: true, message: 'Required field' }]}
