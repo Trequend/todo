@@ -11,8 +11,7 @@ import styles from './Home.module.scss';
 
 export const Home: FC = () => {
   const authorized = usePersistentStore(STORE_KEYS.AUTHORIZED);
-  const loading = useAppSelector((state) => state.user.fetchPending);
-  const error = useAppSelector((state) => state.user.fetchError);
+  const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
   const connect = useMemo(() => {
@@ -54,8 +53,14 @@ export const Home: FC = () => {
     return <Redirect to="/signin" />;
   }
 
-  if (loading || error) {
-    return <Indicator loading={loading} error={error} onReload={connect} />;
+  if (!user.data || user.fetchPending || user.fetchError) {
+    return (
+      <Indicator
+        loading={user.fetchPending}
+        error={user.fetchError}
+        onReload={connect}
+      />
+    );
   } else {
     return (
       <div className={styles.root}>
