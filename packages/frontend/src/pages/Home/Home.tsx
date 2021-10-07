@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo } from 'react';
+import { FC, useEffect, useCallback } from 'react';
 import { Redirect } from 'react-router-dom';
 import { STORE_KEYS } from 'src/app/persistentStore';
 import { Indicator } from 'src/components';
@@ -14,19 +14,15 @@ export const Home: FC = () => {
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
-  const connect = useMemo(() => {
-    return () => {
-      if (authorized) {
-        dispatch(userActions.fetchUser());
-        dispatch(userActions.connect());
-      }
-    };
+  const connect = useCallback(() => {
+    if (authorized) {
+      dispatch(userActions.fetchUser());
+      dispatch(userActions.connect());
+    }
   }, [authorized, dispatch]);
 
-  const disconnect = useMemo(() => {
-    return () => {
-      dispatch(userActions.disconnect());
-    };
+  const disconnect = useCallback(() => {
+    dispatch(userActions.disconnect());
   }, [dispatch]);
 
   useEffect(() => {

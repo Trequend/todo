@@ -1,5 +1,5 @@
 import { Button, Empty } from 'antd';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { Indicator } from 'src/components';
 import { useAppDispatch, useAppSelector } from 'src/hooks';
 import { todosActions } from '../../slice';
@@ -11,17 +11,13 @@ export const TodosList: FC = () => {
   const dispatch = useAppDispatch();
   const [isEditMode, setIsEditMode] = useState(false);
 
-  const connect = useMemo(() => {
-    return () => {
-      dispatch(todosActions.fetchTodos());
-      dispatch(todosActions.connect());
-    };
+  const connect = useCallback(() => {
+    dispatch(todosActions.fetchTodos());
+    dispatch(todosActions.connect());
   }, [dispatch]);
 
-  const disconnect = useMemo(() => {
-    return () => {
-      dispatch(todosActions.disconnect());
-    };
+  const disconnect = useCallback(() => {
+    dispatch(todosActions.disconnect());
   }, [dispatch]);
 
   useEffect(() => {
