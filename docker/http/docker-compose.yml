@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ../../packages/backend
+    container_name: backend
+    restart: always
+    environment:
+      CONNECTION_PROTOCOL: http
+      MONGO_URL: ${MONGO_URL:?Mongo url required}
+      MONGO_DB_NAME: ${MONGO_DB_NAME:-todo}
+      SESSION_MAX_AGE: ${SESSION_MAX_AGE:-2592000000}
+      SESSION_SECRET: ${SESSION_SECRET:?Session secret required}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.backend.rule=PathPrefix(`/api`)
+      - traefik.http.routers.backend.middlewares=strip-api
+      - traefik.http.middlewares.strip-api.stripprefix.prefixes=/api
+
+  frontend:
+    build:
+      context: ../../packages/frontend
+      args:
+        PUBLIC_URL: http://${HOST:-localhost}
+        API_URL: http://${HOST:-localhost}/api
+    container_name: frontend
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.frontend.rule=PathPrefix(`/`)
+    depends_on:
+      - backend
+
+  socket-proxy:
+    image: tecnativa/docker-socket-proxy:0.1.1
+    container_name: socket-proxy
+    restart: always
+    userns_mode: host
+    environment:
+      CONTAINERS: 1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  reverse-proxy:
+    image: traefik:v2.5
+    container_name: reverse-proxy
+    restart: always
+    ports:
+      - 80:80
+    command:
+      - --global.sendAnonymousUsage=false
+      - --providers.docker
+      - --providers.docker.exposedByDefault=false
+      - --providers.docker.endpoint=tcp://socket-proxy:2375
+      - --entryPoints.web.address=:80
+    depends_on:
+      - socket-proxy

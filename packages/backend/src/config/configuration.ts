@@ -14,7 +14,8 @@ export const configuration = () => {
     isProduction: environment.NODE_ENV === Environment.Production,
     port: environment.PORT || 8000,
     sessionMaxAge: environment.SESSION_MAX_AGE || 24 * 60 * 60 * 1000, // ONE DAY
-    mongoUrl: environment.MONGO_URL || 'mongodb://localhost:27017/nest',
+    mongoUrl: environment.MONGO_URL || 'mongodb://localhost:27017',
+    mongoDBName: environment.MONGO_DB_NAME || 'todo',
     isHttpsConnection:
       environment.CONNECTION_PROTOCOL === ConnectionProtocol.Https,
     sessionSecret:

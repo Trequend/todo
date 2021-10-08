@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:5.0.3
+    volumes:
+      - mongo_data:/data/db
+      - ./scripts:/scripts
+    entrypoint: ['/scripts/entry-point.sh']
+
+  backend:
+    build:
+      context: ../../packages/backend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ../../packages/backend/src:/app/src
+    environment:
+      MONGO_URL: mongodb://mongo
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.backend.rule=PathPrefix(`/api`)
+      - traefik.http.routers.backend.middlewares=strip-api
+      - traefik.http.middlewares.strip-api.stripprefix.prefixes=/api
+
+  frontend:
+    build:
+      context: ../../packages/frontend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ../../packages/frontend/src:/app/src
+    environment:
+      PUBLIC_URL: http://${HOST:-localhost}
+      REACT_APP_API_URL: http://${HOST:-localhost}/api
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.frontend.rule=PathPrefix(`/`)
+    depends_on:
+      - backend
+
+  reverse-proxy:
+    image: traefik:v2.5
+    ports:
+      - 80:80
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    userns_mode: host
+    command:
+      - --global.sendAnonymousUsage=false
+      - --api.dashboard=true
+      - --api.insecure=true
+      - --providers.docker
+      - --providers.docker.exposedByDefault=false
+      - --entryPoints.web.address=:80
+
+volumes:
+  mongo_data:

@@ -35,6 +35,7 @@ async function bootstrap() {
     saveUninitialized: false,
     store: MongoStore.create({
       mongoUrl: configService.get('mongoUrl'),
+      dbName: configService.get('mongoDBName'),
     }),
   });
 
@@ -45,7 +46,7 @@ async function bootstrap() {
     })
   );
 
-  await app.listen(configService.get('port'));
+  await app.listen(configService.get('port'), '0.0.0.0');
 }
 
 bootstrap();

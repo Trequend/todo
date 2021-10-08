@@ -45,6 +45,10 @@ export class EnvironmentVariables {
   @IsOptional()
   MONGO_URL?: string;
 
+  @IsString()
+  @IsOptional()
+  MONGO_DB_NAME?: string;
+
   @Min(1)
   @IsInt()
   @IsOptional()

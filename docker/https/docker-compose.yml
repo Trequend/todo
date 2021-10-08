@@ -1,0 +1,91 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ../../packages/backend
+    container_name: backend
+    restart: always
+    environment:
+      CONNECTION_PROTOCOL: https
+      MONGO_URL: ${MONGO_URL:?Mongo url required}
+      MONGO_DB_NAME: ${MONGO_DB_NAME:-todo}
+      SESSION_MAX_AGE: ${SESSION_MAX_AGE:-2592000000}
+      SESSION_SECRET: ${SESSION_SECRET:?Session secret required}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.backend.entrypoints=web-secure
+      - traefik.http.routers.backend.rule=Host(`${DOMAIN:?Domain required}`) && PathPrefix(`/api`)
+      - traefik.http.routers.backend.middlewares=strip-api
+      - traefik.http.middlewares.strip-api.stripprefix.prefixes=/api
+
+  frontend:
+    build:
+      context: ../../packages/frontend
+      args:
+        PUBLIC_URL: https://${DOMAIN:?Domain required}
+        API_URL: https://${DOMAIN:?Domain required}/api
+    container_name: frontend
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.frontend.entrypoints=web-secure
+      - traefik.http.routers.frontend.rule=Host(`${DOMAIN:?Domain required}`) && PathPrefix(`/`)
+    depends_on:
+      - backend
+
+  socket-proxy:
+    image: tecnativa/docker-socket-proxy:0.1.1
+    container_name: socket-proxy
+    restart: always
+    userns_mode: host
+    environment:
+      CONTAINERS: 1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  reverse-proxy:
+    image: traefik:v2.5
+    container_name: reverse-proxy
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - letsencrypt:/letsencrypt
+    command:
+      - --global.sendAnonymousUsage=false
+      - --providers.docker
+      - --providers.docker.exposedByDefault=false
+      - --providers.docker.endpoint=tcp://socket-proxy:2375
+      # HTTP
+      - --entrypoints.web.address=:80
+      # HTTPS
+      - --entrypoints.web-secure.address=:443
+      - --entrypoints.web-secure.http.tls.domains[0].main=${DOMAIN:?Domain required}
+      - --entrypoints.web-secure.http.tls.domains[0].sans=www.${DOMAIN:?Domain required}
+      - --entrypoints.web-secure.http.tls.certResolver=leresolver
+      # Certificate resolver
+      - --certificatesresolvers.leresolver.acme.tlschallenge=true
+      - --certificatesresolvers.leresolver.acme.email=${EMAIL:?Email required}
+      - --certificatesresolvers.leresolver.acme.storage=/letsencrypt/acme.json
+    labels:
+      - traefik.enable=true
+      # Router: http-redirect
+      - traefik.http.routers.http-redirect.entrypoints=web
+      - traefik.http.routers.http-redirect.rule=PathPrefix(`/`)
+      - traefik.http.routers.http-redirect.middlewares=redirect-to-https-from-domain,redirect-to-https
+      # Router: https-www-redirect
+      - traefik.http.routers.https-www-redirect.entrypoints=web-secure
+      - traefik.http.routers.https-www-redirect.rule=Host(`www.${DOMAIN:?Domain required}`)
+      - traefik.http.routers.https-www-redirect.middlewares=redirect-to-https
+      # Middleware: redirect-to-https
+      - traefik.http.middlewares.redirect-to-https.redirectregex.regex=^[^:]*://[^/]*/(.*)
+      - traefik.http.middlewares.redirect-to-https.redirectregex.replacement=https://${DOMAIN:?Domain required}/$${1}
+      # Middleware: redirect-to-https-from-domain
+      - traefik.http.middlewares.redirect-to-https-from-domain.redirectregex.regex=^[^:]*://([a-zA-Z0-9\.\-]*)${DOMAIN:?Domain required}/(.*)
+      - traefik.http.middlewares.redirect-to-https-from-domain.redirectregex.replacement=https://$${1}${DOMAIN:?Domain required}/$${2}
+    depends_on:
+      - socket-proxy
+
+volumes:
+  letsencrypt:
