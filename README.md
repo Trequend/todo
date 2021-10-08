@@ -25,8 +25,8 @@
   - [Sign Up](#sign-up)
   - [Sign In](#sign-in)
   - [Create Todo](#create-todo)
-  - [Edit todo](#edit-todo)
-  - [Edit user](#edit-user)
+  - [Edit Todo](#edit-todo)
+  - [Edit User](#edit-user)
   - [Logout](#logout)
 
 ## Technology Stack
@@ -175,15 +175,15 @@ docker-compose up -d
 
 ### Create Todo
 
-![Create todo](media/create-todo.gif)
+![Create Todo](media/create-todo.gif)
 
 ### Edit Todo
 
-![Edit todo](media/edit-todo.gif)
+![Edit Todo](media/edit-todo.gif)
 
 ### Edit User
 
-![Edit user](media/edit-user.gif)
+![Edit User](media/edit-user.gif)
 
 ### Logout
 
