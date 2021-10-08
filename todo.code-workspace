@@ -17,8 +17,8 @@
     "recommendations": [
       "editorconfig.editorconfig",
       "dbaeumer.vscode-eslint",
-      "esbenp.prettier-vscode",
-      "denoland.vscode-deno"
+      "stylelint.vscode-stylelint",
+      "esbenp.prettier-vscode"
     ]
   },
   "settings": {
